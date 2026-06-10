@@ -16,11 +16,8 @@
     {% paginate collection.products by 20 %}
       {% for product in collection.products %}
         <div class="collection-product">
-          
           <div class="product-image-wrapper">
-            <!-- Brand Anchor: Traveler Favorite Badge -->
             <span class="brand-favorite-badge">Traveler Favorite</span>
-            
             {% if product.featured_image %}
               {% render 'image',
                 class: 'collection-product__image',
@@ -32,33 +29,34 @@
               %}
             {% endif %}
           </div>
-
           <div class="collection-product__content">
             <p class="card-title-link">{{ product.title | escape | link_to: product.url }}</p>
             <p class="card-price-tag">{{ product.price | money }}</p>
           </div>
         </div>
       {% endfor %}
-
-      {{ paginate | default_pagination }}
+      <div class="pagination-wrapper">
+        {{ paginate | default_pagination }}
+      </div>
     {% endpaginate %}
   </div>
 </div>
 
 {% stylesheet %}
   .container {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
   }
-
-  /* Brand Pass: Hero Header */
   .collection-hero-banner {
-    padding: 5rem 2rem;
+    padding: 4rem 1rem;
     background: #f8fafc;
     text-align: center;
     border-bottom: 1px solid #e2e8f0;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
+    box-sizing: border-box;
   }
   .hero-brand-tag {
     color: #ff6b00;
@@ -70,17 +68,18 @@
     margin-bottom: 0.5rem;
   }
   .collection-hero-banner h1 {
-    font-size: 2.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
     color: #0f172a;
     margin: 0 0 1rem 0;
     letter-spacing: -0.02em;
     font-weight: 800;
+    line-height: 1.2;
   }
   .hero-brand-description {
     max-width: 600px;
     margin: 0 auto 1.5rem;
     color: #64748b;
-    font-size: 1.05rem;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
     line-height: 1.6;
   }
   .product-volume-counter {
@@ -92,25 +91,26 @@
     font-size: 0.85rem;
     color: #475569;
   }
-  .product-volume-counter strong {
-    color: #ff6b00;
-  }
-
-  /* Grid Optimization */
+  .product-volume-counter strong { color: #ff6b00; }
   .collection-products {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
-    margin-bottom: 6rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+    margin-bottom: 5rem;
   }
-
-  /* Card Image Anchor Positioning */
   .product-image-wrapper {
     position: relative;
     border-radius: 12px;
     overflow: hidden;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+  .product-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .brand-favorite-badge {
     position: absolute;
@@ -126,33 +126,37 @@
     border-radius: 4px;
     z-index: 2;
   }
-
-  /* Text & Price Styling Harmony */
-  .collection-product__content {
-    padding-top: 1rem;
-  }
+  .collection-product__content { padding-top: 0.75rem; }
   .card-title-link a {
     color: #1e293b;
     text-decoration: none;
     font-weight: 600;
-    font-size: 1rem;
-    transition: color 0.2s ease;
-  }
-  .card-title-link a:hover {
-    color: #ff6b00;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: block;
   }
   .card-price-tag {
     color: #ff6b00;
     font-weight: 700;
     margin-top: 0.25rem;
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
-
+  .pagination-wrapper {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+  }
   @media (max-width: 1024px) {
-    .collection-products { grid-template-columns: repeat(2, 1fr); }
+    .collection-products { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
   }
-  @media (max-width: 600px) {
-    .collection-products { grid-template-columns: 1fr; }
+  @media (max-width: 768px) {
+    .collection-products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+    .collection-hero-banner { padding: 3rem 1rem; margin-bottom: 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    .collection-products { grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 1.5rem; }
   }
 {% endstylesheet %}
 

@@ -1,15 +1,12 @@
 <div class="cart-page-wrapper-section">
   <div class="cart-restricted-container">
-    
     <div class="cart-main-title-header">
       <h1>{{ 'cart.title' | t }}</h1>
       <div class="accent-bar"></div>
     </div>
 
     {% if cart.item_count > 0 %}
-      
-      <!-- Brand Pass: Dynamic Free Shipping Progress Matrix Monitor Bar -->
-      {% assign threshold_cents = 1500000 %} <!-- $1,500.00 represented in cents integer format -->
+      {% assign threshold_cents = 1500000 %}
       <div class="brand-shipping-tracker-card-box">
         {% if cart.total_price < threshold_cents %}
           {% assign amount_left = threshold_cents | minus: cart.total_price %}
@@ -31,75 +28,66 @@
       </div>
 
       <form action="{{ routes.cart_url }}" method="post" class="cart-form-split-grid">
-        
         <div class="cart-items-panel">
-          <table class="premium-cart-table">
+          <div class="premium-cart-list">
             {% for item in cart.items %}
-              <tr class="cart-item-row-card">
-                <td class="cell-thumb">
+              <div class="cart-item-row-card">
+                <div class="cell-thumb">
                   <div class="thumb-frame">
                     {% render 'image', image: item.image, url: item.url %}
                   </div>
-                </td>
-                <td class="cell-meta">
+                </div>
+                <div class="cell-meta">
                   <p class="item-title-str">{{ item.product.title }}</p>
                   <p class="item-price-str">{{ item.final_price | money }}</p>
                   <span class="remove-action-btn-link">{{ 'cart.remove' | t | link_to: item.url_to_remove }}</span>
-                </td>
-                <td class="cell-actions">
+                </div>
+                <div class="cell-actions">
                   <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="qty-field-box">
                   <input type="submit" value="{{ 'cart.update' | t }}" class="cart-sync-refresh-btn">
-                </td>
-              </tr>
+                </div>
+              </div>
             {% endfor %}
-          </table>
+          </div>
         </div>
 
         <div class="cart-checkout-summary-panel">
           <div class="checkout-summary-box">
-            
-            <!-- Brand Pass: Editorial Travel Tip Box Integration -->
             <div class="brand-travel-tip-notice-box">
               <span class="tip-label-badge">Nomad Travel Tip</span>
               <p>Packing compression cubes inside your structural technical case layout decreases volume footprints by up to 30% instantly.</p>
             </div>
-
             <div class="subtotal-row-display">
               <span class="label">Aggregate Subtotal:</span>
               <span class="value">{{ cart.total_price | money }}</span>
             </div>
-
             <input type="submit" name="checkout" value="Secure Order Checkout" class="cart-checkout-master-cta-btn">
           </div>
         </div>
-
       </form>
-
     {% else %}
       <div class="cart-empty-fallback-state">
         <p>Your packing crate configuration is empty.</p>
         <a href="/collections/all" class="return-btn">Explore Crate Store</a>
       </div>
     {% endif %}
-
   </div>
 </div>
 
 {% stylesheet %}
   .cart-restricted-container {
+    width: 100%;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 6rem 2rem;
+    padding: 4rem 1.5rem;
+    box-sizing: border-box;
   }
-  .cart-main-title-header {
-    text-align: center;
-    margin-bottom: 3.5rem;
-  }
+  .cart-main-title-header { text-align: center; margin-bottom: 2.5rem; }
   .cart-main-title-header h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
     color: #0f172a;
     font-weight: 800;
-    margin: 0 0 0.75rem 0;
+    margin: 0 0 0.5rem 0;
     letter-spacing: -0.02em;
   }
   .cart-main-title-header .accent-bar {
@@ -109,166 +97,92 @@
     margin: 0 auto;
     border-radius: 10px;
   }
-
-  /* Brand Pass: Progress Tracker Styles */
   .brand-shipping-tracker-card-box {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 3rem;
+    padding: 1.25rem;
+    margin-bottom: 2.5rem;
+    box-sizing: border-box;
   }
-  .tracker-text-row {
-    font-size: 0.95rem;
-    color: #334155;
-    margin-bottom: 0.75rem;
-  }
-  .tracker-text-row strong {
-    color: #ff6b00;
-  }
-  .tracker-text-row.success-unlocked strong {
-    color: #22c55e;
-  }
-  .tracker-progress-bar-rail {
-    width: 100%;
-    height: 6px;
-    background: #e2e8f0;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .tracker-progress-bar-fill {
-    height: 100%;
-    background: #ff6b00;
-    border-radius: 10px;
-    transition: width 0.4s ease;
-  }
-  .tracker-progress-bar-fill.unlocked {
-    background: #22c55e;
-  }
+  .tracker-text-row { font-size: 0.9rem; color: #334155; margin-bottom: 0.5rem; line-height: 1.4; }
+  .tracker-text-row strong { color: #ff6b00; }
+  .tracker-text-row.success-unlocked strong { color: #22c55e; }
+  .tracker-progress-bar-rail { width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+  .tracker-progress-bar-fill { height: 100%; background: #ff6b00; transition: width 0.4s ease; }
+  .tracker-progress-bar-fill.unlocked { background: #22c55e; }
 
-  /* Master Layout Form split columns */
   .cart-form-split-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
-    gap: 4rem;
+    gap: 3rem;
     align-items: flex-start;
   }
-  .premium-cart-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+  .premium-cart-list { display: flex; flex-direction: column; gap: 1rem; }
   .cart-item-row-card {
-    border-bottom: 1px solid #e2e8f0;
-  }
-  .cart-item-row-card td {
-    padding: 1.5rem 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: #ffffff;
   }
   .thumb-frame {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #e2e8f0;
-    background: #f8fafc;
+    flex-shrink: 0;
   }
   .thumb-frame img { width: 100%; height: 100%; object-fit: cover; }
-  
-  .cell-meta { padding-left: 1.5rem !important; }
-  .item-title-str { font-weight: 600; color: #1e293b; margin: 0 0 0.25rem 0; }
-  .item-price-str { color: #ff6b00; font-weight: 700; margin: 0 0 0.5rem 0; font-size: 0.95rem; }
-  .remove-action-btn-link a { color: #94a3b8; font-size: 0.8rem; text-decoration: none; font-weight: 600; text-transform: uppercase; }
+  .cell-meta { flex-grow: 1; min-width: 0; }
+  .item-title-str { font-weight: 600; color: #1e293b; margin: 0 0 0.25rem 0; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-price-str { color: #ff6b00; font-weight: 700; margin: 0 0 0.4rem 0; font-size: 0.9rem; }
+  .remove-action-btn-link a { color: #94a3b8; font-size: 0.75rem; text-decoration: none; font-weight: 700; text-transform: uppercase; }
   .remove-action-btn-link a:hover { color: #ef4444; }
-
-  .cell-actions { text-align: right; }
+  
+  .cell-actions { display: flex; align-items: center; gap: 0.5rem; }
   .qty-field-box {
-    width: 60px;
+    width: 55px;
     padding: 0.5rem;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
     background: #f8fafc;
     text-align: center;
     font-weight: 600;
-    margin-right: 0.5rem;
   }
   .cart-sync-refresh-btn {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     background: #ffffff;
     border: 1px solid #cbd5e1;
     color: #475569;
     border-radius: 6px;
     font-weight: 600;
+    font-size: 0.8rem;
     cursor: pointer;
-    font-size: 0.85rem;
   }
-  .cart-sync-refresh-btn:hover { border-color: #0f172a; color: #0f172a; }
-
-  /* Right Checkout Card Box Panel */
-  .checkout-summary-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 2rem;
-  }
-  
-  /* Brand Pass: Travel Tip Styles */
-  .brand-travel-tip-notice-box {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    padding: 1.25rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-    border-left: 3px solid #ff6b00;
-  }
-  .tip-label-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #ff6b00;
-    letter-spacing: 0.05em;
-    display: block;
-    margin-bottom: 0.4rem;
-  }
-  .brand-travel-tip-notice-box p {
-    margin: 0;
-    font-size: 0.85rem;
-    color: #475569;
-    line-height: 1.5;
-  }
-
-  .subtotal-row-display {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 1.5rem;
-  }
-  .subtotal-row-display .label { font-weight: 700; color: #0f172a; }
-  .subtotal-row-display .value { color: #ff6b00; font-weight: 800; font-size: 1.35rem; }
-
-  .cart-checkout-master-cta-btn {
-    width: 100%;
-    padding: 1.1rem;
-    border: none;
-    background: #0f172a;
-    color: #ffffff;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  .cart-checkout-master-cta-btn:hover { background: #ff6b00; transform: translateY(-2px); }
-
+  .checkout-summary-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; box-sizing: border-box; }
+  .brand-travel-tip-notice-box { background: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; border-left: 3px solid #ff6b00; }
+  .tip-label-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #ff6b00; display: block; margin-bottom: 0.25rem; }
+  .brand-travel-tip-notice-box p { margin: 0; font-size: 0.8rem; color: #475569; line-height: 1.4; }
+  .subtotal-row-display { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; }
+  .subtotal-row-display .label { font-weight: 700; color: #0f172a; font-size: 0.95rem; }
+  .subtotal-row-display .value { color: #ff6b00; font-weight: 800; font-size: 1.25rem; }
+  .cart-checkout-master-cta-btn { width: 100%; padding: 1rem; border: none; background: #0f172a; color: #ffffff; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
   .cart-empty-fallback-state { text-align: center; padding: 4rem 0; }
-  .cart-empty-fallback-state p { color: #64748b; margin-bottom: 1.5rem; }
-  .return-btn { display: inline-block; background: #0f172a; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
+  .return-btn { display: inline-block; background: #0f172a; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 1rem; }
 
-  @media (max-width: 768px) {
-    .cart-form-split-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .cart-item-row-card { display: flex; flex-direction: column; align-items: flex-start; position: relative; }
-    .cell-meta { padding-left: 0 !important; margin: 0.5rem 0 1rem; }
-    .cell-actions { width: 100%; text-align: left; }
+  @media (max-width: 840px) {
+    .cart-form-split-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  @media (max-width: 520px) {
+    .cart-item-row-card { flex-direction: column; align-items: flex-start; gap: 1rem; position: relative; }
+    .cell-thumb { width: 60px; height: 60px; }
+    .cell-actions { width: 100%; justify-content: space-between; border-top: 1px dashed #e2e8f0; padding-top: 0.75rem; }
+    .qty-field-box { width: 65px; }
   }
 {% endstylesheet %}
 

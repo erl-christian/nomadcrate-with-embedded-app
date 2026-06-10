@@ -1,7 +1,5 @@
 <section class="premium-product-layout">
   <div class="product-master-container">
-    
-    <!-- Left Panel: Media Stack -->
     <div class="product-media-column">
       <div class="product-images">
         {% for image in product.images %}
@@ -11,22 +9,17 @@
         {% endfor %}
       </div>
     </div>
-
-    <!-- Right Panel: Data & Buy Interactivity -->
     <div class="product-details-column">
       <div class="sticky-details-panel">
-        
         <div class="product-info">
           <span class="brand-vendor-tag">{{ product.vendor | default: "NomadCrate Lab" }}</span>
           <h1>{{ product.title }}</h1>
           <p class="product-price-metric">{{ product.price | money }}</p>
           <div class="product-description-body">{{ product.description }}</div>
         </div>
-
         <div class="product-form">
           {% form 'product', product %}
             {% assign current_variant = product.selected_or_first_available_variant %}
-
             <div class="variant-selector-group">
               <label>Select Specification</label>
               <select name="id" class="custom-form-select">
@@ -37,65 +30,53 @@
                 {% endfor %}
               </select>
             </div>
-
             <div class="quantity-form-group">
               <label>Quantity</label>
               <input type="number" name="quantity" min="1" value="1" class="custom-qty-input">
             </div>
-
             <div class="form-buy-actions-row">
               <input type="submit" value="Add To Core Crate" class="add-to-cart-cta-button">
               {{ form | payment_button }}
             </div>
           {% endform %}
         </div>
-
-        <!-- Brand Pass: Brand Trust Shield Metrics -->
         <div class="brand-trust-shield-row">
           <div class="trust-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
             <span>Free Shipping</span>
           </div>
           <div class="trust-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
             <span>30 Day Returns</span>
           </div>
           <div class="trust-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
             <span>Traveler Approved</span>
           </div>
         </div>
-
-        <!-- Brand Pass: Vector Highlights Checklist Profile -->
         <div class="brand-highlights-checklist-profile">
           <h4>Engineered Vector Profile</h4>
           <ul class="highlight-bullet-nodes">
-            <li>
-              <strong>Optimal Allocation:</strong> Highly recommended for Multi-Terrain Adventures & Transit Hub Commutes.
-            </li>
-            <li>
-              <strong>Form Scale:</strong> Tailored specifically for Weekend Getaways and International Carry-On Space Constraints.
-            </li>
-            <li>
-              <strong>Material Resilience:</strong> Shield-grade architecture designed for seamless element protection.
-            </li>
+            <li><strong>Optimal Allocation:</strong> Highly recommended for Multi-Terrain Adventures & Transit Hub Commutes.</li>
+            <li><strong>Form Scale:</strong> Tailored specifically for Weekend Getaways and International Carry-On Space Constraints.</li>
+            <li><strong>Material Resilience:</strong> Shield-grade architecture designed for seamless element protection.</li>
           </ul>
         </div>
-
       </div>
     </div>
-
   </div>
 </section>
 
 {% stylesheet %}
   .product-master-container {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 6rem 2rem;
+    padding: 4rem 1.5rem;
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 5rem;
+    gap: 4rem;
+    box-sizing: border-box;
   }
   .single-image-card {
     background: #f8fafc;
@@ -104,6 +85,7 @@
     overflow: hidden;
     margin-bottom: 1.5rem;
     aspect-ratio: 1 / 1;
+    width: 100%;
   }
   .single-image-card img {
     width: 100%;
@@ -112,7 +94,7 @@
   }
   .sticky-details-panel {
     position: sticky;
-    top: 40px;
+    top: 100px;
   }
   .brand-vendor-tag {
     color: #ff6b00;
@@ -124,55 +106,55 @@
     margin-bottom: 0.5rem;
   }
   .product-info h1 {
-    font-size: 2.25rem;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
     color: #0f172a;
     margin: 0 0 0.5rem 0;
     font-weight: 800;
     letter-spacing: -0.02em;
+    line-height: 1.2;
   }
   .product-price-metric {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     color: #ff6b00;
     font-weight: 700;
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
   }
   .product-description-body {
     color: #475569;
     line-height: 1.6;
     font-size: 0.95rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
-
-  /* Form Element Aesthetics */
-  .variant-selector-group, .quantity-form-group {
-    margin-bottom: 1.5rem;
-  }
+  .variant-selector-group, .quantity-form-group { margin-bottom: 1.25rem; }
   .variant-selector-group label, .quantity-form-group label {
     display: block;
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
     color: #64748b;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.02em;
+    margin-bottom: 0.4rem;
   }
   .custom-form-select {
     width: 100%;
-    padding: 0.9rem 1.25rem;
+    padding: 0.85rem 1rem;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
     font-weight: 600;
     color: #1e293b;
+    font-size: 0.9rem;
+    max-width: 100%;
   }
   .custom-qty-input {
-    width: 90px;
+    width: 100%;
+    max-width: 90px;
     padding: 0.8rem;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
     text-align: center;
     font-weight: 600;
+    box-sizing: border-box;
   }
   .add-to-cart-cta-button {
     width: 100%;
@@ -187,19 +169,16 @@
     transition: all 0.3s ease;
     margin-bottom: 0.5rem;
   }
-  .add-to-cart-cta-button:hover {
-    background: #ff6b00;
-    transform: translateY(-2px);
-  }
-
-  /* Brand Pass: Trust Shield CSS Elements */
+  .add-to-cart-cta-button:hover { background: #ff6b00; }
   .brand-trust-shield-row {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     justify-content: space-between;
     padding: 1.25rem 0;
     border-top: 1px solid #e2e8f0;
     border-bottom: 1px solid #e2e8f0;
-    margin: 2.5rem 0;
+    margin: 2rem 0;
   }
   .trust-item {
     display: flex;
@@ -209,24 +188,15 @@
     font-size: 0.8rem;
     font-weight: 700;
   }
-  .trust-item svg {
-    color: #ff6b00;
-  }
-
-  /* Brand Pass: Highlights Box Layout */
+  .trust-item svg { color: #ff6b00; flex-shrink: 0; }
   .brand-highlights-checklist-profile h4 {
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     color: #0f172a;
     margin: 0 0 1rem 0;
-    letter-spacing: 0.05em;
   }
-  .highlight-bullet-nodes {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
+  .highlight-bullet-nodes { margin: 0; padding: 0; list-style: none; }
   .highlight-bullet-nodes li {
     position: relative;
     padding-left: 1.25rem;
@@ -242,9 +212,8 @@
     color: #ff6b00;
     font-weight: 700;
   }
-
   @media (max-width: 900px) {
-    .product-master-container { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+    .product-master-container { grid-template-columns: 1fr; gap: 3rem; padding: 2.5rem 1.25rem; }
     .sticky-details-panel { position: static; }
   }
 {% endstylesheet %}
