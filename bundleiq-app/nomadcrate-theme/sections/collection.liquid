@@ -1,0 +1,164 @@
+<div class="collection-hero-banner">
+  <div class="container">
+    <span class="hero-brand-tag">NomadCrate Curated Vault</span>
+    <h1>{{ collection.title }}</h1>
+    <p class="hero-brand-description">
+      Premium technical travel gear and storage vector configurations engineered for modern explorers.
+    </p>
+    <div class="product-volume-counter">
+      <strong>{{ collection.products_count }}</strong> Pack Configurations Available
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="collection-products">
+    {% paginate collection.products by 20 %}
+      {% for product in collection.products %}
+        <div class="collection-product">
+          
+          <div class="product-image-wrapper">
+            <!-- Brand Anchor: Traveler Favorite Badge -->
+            <span class="brand-favorite-badge">Traveler Favorite</span>
+            
+            {% if product.featured_image %}
+              {% render 'image',
+                class: 'collection-product__image',
+                image: product.featured_image,
+                url: product.url,
+                width: 400,
+                height: 400,
+                crop: 'center'
+              %}
+            {% endif %}
+          </div>
+
+          <div class="collection-product__content">
+            <p class="card-title-link">{{ product.title | escape | link_to: product.url }}</p>
+            <p class="card-price-tag">{{ product.price | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+
+      {{ paginate | default_pagination }}
+    {% endpaginate %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Brand Pass: Hero Header */
+  .collection-hero-banner {
+    padding: 5rem 2rem;
+    background: #f8fafc;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 4rem;
+  }
+  .hero-brand-tag {
+    color: #ff6b00;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .collection-hero-banner h1 {
+    font-size: 2.75rem;
+    color: #0f172a;
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+  }
+  .hero-brand-description {
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    color: #64748b;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .product-volume-counter {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+  .product-volume-counter strong {
+    color: #ff6b00;
+  }
+
+  /* Grid Optimization */
+  .collection-products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+    margin-bottom: 6rem;
+  }
+
+  /* Card Image Anchor Positioning */
+  .product-image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+  }
+  .brand-favorite-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 2;
+  }
+
+  /* Text & Price Styling Harmony */
+  .collection-product__content {
+    padding-top: 1rem;
+  }
+  .card-title-link a {
+    color: #1e293b;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+  }
+  .card-title-link a:hover {
+    color: #ff6b00;
+  }
+  .card-price-tag {
+    color: #ff6b00;
+    font-weight: 700;
+    margin-top: 0.25rem;
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 1024px) {
+    .collection-products { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .collection-products { grid-template-columns: 1fr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Grid Matrix",
+  "settings": []
+}
+{% endschema %}

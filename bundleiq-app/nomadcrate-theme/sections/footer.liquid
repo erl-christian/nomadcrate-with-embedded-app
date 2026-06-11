@@ -1,0 +1,101 @@
+<footer class="nc-global-footer">
+  <div class="container">
+    <div class="footer-split-grid">
+      
+      <div class="footer-brand-info-block">
+        <h3>Nomad<span>Crate</span></h3>
+        <p>Highly optimized dynamic luggage and storage configurations engineered for the modern technical explorer.</p>
+      </div>
+
+      <div class="footer-links-navigation-block">
+        <h4>Explore Directory</h4>
+        <div class="links-grid">
+          {% for link in linklists.footer.links %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-copyright-bottom-row">
+      <p>&copy; {{ 'now' | date: '%Y' }} NomadCrate Laboratories. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+.nc-global-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 5rem 2rem 3rem;
+  color: #475569;
+}
+.nc-global-footer .container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.footer-split-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 6rem;
+  margin-bottom: 4rem;
+}
+.footer-brand-info-block h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+.footer-brand-info-block h3 span {
+  color: #ff6b00;
+}
+.footer-brand-info-block p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 440px;
+  color: #64748b;
+}
+.footer-links-navigation-block h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+  margin: 0 0 1.25rem 0;
+}
+.links-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.links-grid a {
+  text-decoration: none;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.links-grid a:hover {
+  color: #ff6b00;
+}
+.footer-copyright-bottom-row {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .footer-split-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Global Footer",
+  "settings": []
+}
+{% endschema %}

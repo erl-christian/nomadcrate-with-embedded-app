@@ -1,0 +1,94 @@
+<header class="nc-global-header">
+  <div class="header-container">
+    <a href="/" class="header-brand-logo">
+      Nomad<span>Crate</span>
+    </a>
+    
+    <nav class="header-navigation-menu" aria-label="Main Navigation">
+      {% for link in linklists.main-menu.links %}
+        <a href="{{ link.url }}" class="nav-link-item {% if link.active %}active-route{% endif %}">
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    </nav>
+
+    <div class="header-actions-tray">
+      <a href="/cart" class="header-cart-trigger">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        {% if cart.item_count > 0 %}
+          <span class="cart-indicator-dot">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% stylesheet %}
+.nc-global-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1.25rem 2rem;
+}
+.header-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-brand-logo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+}
+.header-brand-logo span {
+  color: #ff6b00;
+}
+.header-navigation-menu {
+  display: flex;
+  gap: 2.5rem;
+}
+.nav-link-item {
+  text-decoration: none;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+.nav-link-item:hover, .nav-link-item.active-route {
+  color: #ff6b00;
+}
+.header-cart-trigger {
+  color: #0f172a;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cart-indicator-dot {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ff6b00;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Global Header",
+  "settings": []
+}
+{% endschema %}

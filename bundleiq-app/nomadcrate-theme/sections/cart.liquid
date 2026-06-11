@@ -1,0 +1,280 @@
+<div class="cart-page-wrapper-section">
+  <div class="cart-restricted-container">
+    
+    <div class="cart-main-title-header">
+      <h1>{{ 'cart.title' | t }}</h1>
+      <div class="accent-bar"></div>
+    </div>
+
+    {% if cart.item_count > 0 %}
+      
+      <!-- Brand Pass: Dynamic Free Shipping Progress Matrix Monitor Bar -->
+      {% assign threshold_cents = 1500000 %} <!-- $1,500.00 represented in cents integer format -->
+      <div class="brand-shipping-tracker-card-box">
+        {% if cart.total_price < threshold_cents %}
+          {% assign amount_left = threshold_cents | minus: cart.total_price %}
+          <div class="tracker-text-row">
+            You are only <strong>{{ amount_left | money }}</strong> away from unlocking <strong>Free Ocean Shipping</strong>!
+          </div>
+          <div class="tracker-progress-bar-rail">
+            {% assign percentage = cart.total_price | times: 100 | divided_by: threshold_cents %}
+            <div class="tracker-progress-bar-fill" style="width: {{ percentage }}%;"></div>
+          </div>
+        {% else %}
+          <div class="tracker-text-row success-unlocked">
+            🎉 <strong>Congratulations!</strong> Your crate profile has qualified for Free Ocean Shipping.
+          </div>
+          <div class="tracker-progress-bar-rail">
+            <div class="tracker-progress-bar-fill unlocked" style="width: 100%;"></div>
+          </div>
+        {% endif %}
+      </div>
+
+      <form action="{{ routes.cart_url }}" method="post" class="cart-form-split-grid">
+        
+        <div class="cart-items-panel">
+          <table class="premium-cart-table">
+            {% for item in cart.items %}
+              <tr class="cart-item-row-card">
+                <td class="cell-thumb">
+                  <div class="thumb-frame">
+                    {% render 'image', image: item.image, url: item.url %}
+                  </div>
+                </td>
+                <td class="cell-meta">
+                  <p class="item-title-str">{{ item.product.title }}</p>
+                  <p class="item-price-str">{{ item.final_price | money }}</p>
+                  <span class="remove-action-btn-link">{{ 'cart.remove' | t | link_to: item.url_to_remove }}</span>
+                </td>
+                <td class="cell-actions">
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="qty-field-box">
+                  <input type="submit" value="{{ 'cart.update' | t }}" class="cart-sync-refresh-btn">
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+
+        <div class="cart-checkout-summary-panel">
+          <div class="checkout-summary-box">
+            
+            <!-- Brand Pass: Editorial Travel Tip Box Integration -->
+            <div class="brand-travel-tip-notice-box">
+              <span class="tip-label-badge">Nomad Travel Tip</span>
+              <p>Packing compression cubes inside your structural technical case layout decreases volume footprints by up to 30% instantly.</p>
+            </div>
+
+            <div class="subtotal-row-display">
+              <span class="label">Aggregate Subtotal:</span>
+              <span class="value">{{ cart.total_price | money }}</span>
+            </div>
+
+            <input type="submit" name="checkout" value="Secure Order Checkout" class="cart-checkout-master-cta-btn">
+          </div>
+        </div>
+
+      </form>
+
+    {% else %}
+      <div class="cart-empty-fallback-state">
+        <p>Your packing crate configuration is empty.</p>
+        <a href="/collections/all" class="return-btn">Explore Crate Store</a>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .cart-restricted-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+  .cart-main-title-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .cart-main-title-header h1 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.02em;
+  }
+  .cart-main-title-header .accent-bar {
+    width: 48px;
+    height: 4px;
+    background: #ff6b00;
+    margin: 0 auto;
+    border-radius: 10px;
+  }
+
+  /* Brand Pass: Progress Tracker Styles */
+  .brand-shipping-tracker-card-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .tracker-text-row {
+    font-size: 0.95rem;
+    color: #334155;
+    margin-bottom: 0.75rem;
+  }
+  .tracker-text-row strong {
+    color: #ff6b00;
+  }
+  .tracker-text-row.success-unlocked strong {
+    color: #22c55e;
+  }
+  .tracker-progress-bar-rail {
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tracker-progress-bar-fill {
+    height: 100%;
+    background: #ff6b00;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+  }
+  .tracker-progress-bar-fill.unlocked {
+    background: #22c55e;
+  }
+
+  /* Master Layout Form split columns */
+  .cart-form-split-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    align-items: flex-start;
+  }
+  .premium-cart-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .cart-item-row-card {
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .cart-item-row-card td {
+    padding: 1.5rem 0;
+  }
+  .thumb-frame {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+  .thumb-frame img { width: 100%; height: 100%; object-fit: cover; }
+  
+  .cell-meta { padding-left: 1.5rem !important; }
+  .item-title-str { font-weight: 600; color: #1e293b; margin: 0 0 0.25rem 0; }
+  .item-price-str { color: #ff6b00; font-weight: 700; margin: 0 0 0.5rem 0; font-size: 0.95rem; }
+  .remove-action-btn-link a { color: #94a3b8; font-size: 0.8rem; text-decoration: none; font-weight: 600; text-transform: uppercase; }
+  .remove-action-btn-link a:hover { color: #ef4444; }
+
+  .cell-actions { text-align: right; }
+  .qty-field-box {
+    width: 60px;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f8fafc;
+    text-align: center;
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  .cart-sync-refresh-btn {
+    padding: 0.5rem 1rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .cart-sync-refresh-btn:hover { border-color: #0f172a; color: #0f172a; }
+
+  /* Right Checkout Card Box Panel */
+  .checkout-summary-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+  }
+  
+  /* Brand Pass: Travel Tip Styles */
+  .brand-travel-tip-notice-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 1.25rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    border-left: 3px solid #ff6b00;
+  }
+  .tip-label-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ff6b00;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .brand-travel-tip-notice-box p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  .subtotal-row-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+  }
+  .subtotal-row-display .label { font-weight: 700; color: #0f172a; }
+  .subtotal-row-display .value { color: #ff6b00; font-weight: 800; font-size: 1.35rem; }
+
+  .cart-checkout-master-cta-btn {
+    width: 100%;
+    padding: 1.1rem;
+    border: none;
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .cart-checkout-master-cta-btn:hover { background: #ff6b00; transform: translateY(-2px); }
+
+  .cart-empty-fallback-state { text-align: center; padding: 4rem 0; }
+  .cart-empty-fallback-state p { color: #64748b; margin-bottom: 1.5rem; }
+  .return-btn { display: inline-block; background: #0f172a; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
+
+  @media (max-width: 768px) {
+    .cart-form-split-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .cart-item-row-card { display: flex; flex-direction: column; align-items: flex-start; position: relative; }
+    .cell-meta { padding-left: 0 !important; margin: 0.5rem 0 1rem; }
+    .cell-actions { width: 100%; text-align: left; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cart Monitor Matrix",
+  "settings": []
+}
+{% endschema %}

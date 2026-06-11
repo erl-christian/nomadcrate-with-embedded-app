@@ -1,0 +1,630 @@
+<section class="smart-pack-builder">
+  <div class="container">
+    <div class="builder-layout-grid">
+      
+      <div class="builder-intro-panel">
+        <span class="builder-subtitle">Dynamic Engine</span>
+        <h2>Build Your Travel Pack</h2>
+        <p>
+          Skip manual checklists. Generate real-time gear profiles built specifically for your destination vectors and duration limits instantly.
+        </p>
+        <div class="builder-decor-graphics">
+          <div class="decor-line"></div>
+        </div>
+      </div>
+
+      <div class="builder-interactive-card">
+        <div class="builder-form">
+
+          <div class="step-group">
+            <h3>1. Choose Your Destination</h3>
+            <div class="option-grid">
+              <button type="button" class="option-btn" data-group="destination" data-value="beach">
+                <svg class="option-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M12 2v14"/><path d="m12 11 4-4-4-4"/><path d="M16 11H8"/></svg>
+                <span>Beach & Coastal</span>
+              </button>
+              <button type="button" class="option-btn" data-group="destination" data-value="mountain">
+                <svg class="option-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+                <span>Mountain Terrain</span>
+              </button>
+              <button type="button" class="option-btn" data-group="destination" data-value="city">
+                <svg class="option-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M9 22V12h6v10"/><path d="M8 7h2"/><path d="M14 7h2"/><path d="M8 12h2"/><path d="M14 12h2"/></svg>
+                <span>Urban Hubs</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="step-group">
+            <h3>2. Choose Travel Style</h3>
+            <div class="option-grid">
+              <button type="button" class="option-btn" data-group="style" data-value="light">
+                <svg class="option-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.18a2 2 0 0 1-1.73-1H8.91a2 2 0 0 1-1.73 1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/><circle cx="12" cy="13" r="3"/></svg>
+                <span>Lightweight</span>
+              </button>
+              <button type="button" class="option-btn" data-group="style" data-value="business">
+                <svg class="option-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <span>Business Elite</span>
+              </button>
+              <button type="button" class="option-btn" data-group="style" data-value="adventure">
+                <svg class="option-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                <span>Technical Alt</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="step-group">
+            <h3>3. Trip Duration</h3>
+            <div class="option-grid">
+              <button type="button" class="option-btn" data-group="duration" data-value="weekend">
+                Weekend
+              </button>
+              <button type="button" class="option-btn" data-group="duration" data-value="week">
+                1 Week
+              </button>
+              <button type="button" class="option-btn" data-group="duration" data-value="long">
+                2+ Weeks
+              </button>
+            </div>
+          </div>
+
+          <button id="build-pack-btn" class="builder-submit-cta">
+            <span>Compile Crate Setup</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div id="pack-results" class="results-viewport hidden-state"></div>
+  </div>
+</section>
+
+<script>
+const PRODUCTS = {
+  "quick-dry-travel-towel": {
+    title: "{{ all_products['quick-dry-travel-towel'].title | default: 'Quick Dry Travel Towel' }}",
+    price: "{{ all_products['quick-dry-travel-towel'].price | money | default: '$29.00' }}",
+    url: "{{ all_products['quick-dry-travel-towel'].url | default: '#' }}",
+    image: "{% if all_products['quick-dry-travel-towel'].featured_image %}{{ all_products['quick-dry-travel-towel'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "waterproof-travel-pouch": {
+    title: "{{ all_products['waterproof-travel-pouch'].title | default: 'Waterproof Travel Pouch' }}",
+    price: "{{ all_products['waterproof-travel-pouch'].price | money | default: '$19.00' }}",
+    url: "{{ all_products['waterproof-travel-pouch'].url | default: '#' }}",
+    image: "{% if all_products['waterproof-travel-pouch'].featured_image %}{{ all_products['waterproof-travel-pouch'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-2' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "packable-sun-hat": {
+    title: "{{ all_products['packable-sun-hat'].title | default: 'Packable Sun Hat' }}",
+    price: "{{ all_products['packable-sun-hat'].price | money | default: '$35.00' }}",
+    url: "{{ all_products['packable-sun-hat'].url | default: '#' }}",
+    image: "{% if all_products['packable-sun-hat'].featured_image %}{{ all_products['packable-sun-hat'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-3' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "explorer-backpack-50l": {
+    title: "{{ all_products['explorer-backpack-50l'].title | default: 'Explorer Backpack 50L' }}",
+    price: "{{ all_products['explorer-backpack-50l'].price | money | default: '$149.00' }}",
+    url: "{{ all_products['explorer-backpack-50l'].url | default: '#' }}",
+    image: "{% if all_products['explorer-backpack-50l'].featured_image %}{{ all_products['explorer-backpack-50l'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-4' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "insulated-hiking-bottle": {
+    title: "{{ all_products['insulated-hiking-bottle'].title | default: 'Insulated Hiking Bottle' }}",
+    price: "{{ all_products['insulated-hiking-bottle'].price | money | default: '$39.00' }}",
+    url: "{{ all_products['insulated-hiking-bottle'].url | default: '#' }}",
+    image: "{% if all_products['insulated-hiking-bottle'].featured_image %}{{ all_products['insulated-hiking-bottle'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-5' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "weatherproof-tent": {
+    title: "{{ all_products['weatherproof-tent'].title | default: 'Weatherproof Alpine Tent' }}",
+    price: "{{ all_products['weatherproof-tent'].price | money | default: '$280.00' }}",
+    url: "{{ all_products['weatherproof-tent'].url | default: '#' }}",
+    image: "{% if all_products['weatherproof-tent'].featured_image %}{{ all_products['weatherproof-tent'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-6' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "anti-theft-daypack": {
+    title: "{{ all_products['anti-theft-daypack'].title | default: 'Anti-Theft Daypack' }}",
+    price: "{{ all_products['anti-theft-daypack'].price | money | default: '$89.00' }}",
+    url: "{{ all_products['anti-theft-daypack'].title | default: '#' }}",
+    image: "{% if all_products['anti-theft-daypack'].featured_image %}{{ all_products['anti-theft-daypack'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "universal-travel-adapter": {
+    title: "{{ all_products['universal-travel-adapter'].title | default: 'Universal Travel Adapter' }}",
+    price: "{{ all_products['universal-travel-adapter'].price | money | default: '$45.00' }}",
+    url: "{{ all_products['universal-travel-adapter'].url | default: '#' }}",
+    image: "{% if all_products['universal-travel-adapter'].featured_image %}{{ all_products['universal-travel-adapter'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-2' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  },
+  "20-000mah-power-bank": {
+    title: "{{ all_products['20-000mah-power-bank'].title | default: '20,000mAh Power Bank' }}",
+    price: "{{ all_products['20-000mah-power-bank'].price | money | default: '$59.00' }}",
+    url: "{{ all_products['20-000mah-power-bank'].url | default: '#' }}",
+    image: "{% if all_products['20-000mah-power-bank'].featured_image %}{{ all_products['20-000mah-power-bank'].featured_image | image_url: width: 600 }}{% else %}{{ 'product-3' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}"
+  }
+};
+
+const RULES = {
+  beach: {
+    light: ["quick-dry-travel-towel", "waterproof-travel-pouch", "packable-sun-hat"],
+    business: ["waterproof-travel-pouch", "packable-sun-hat", "20-000mah-power-bank"],
+    adventure: ["quick-dry-travel-towel", "waterproof-travel-pouch", "explorer-backpack-50l"]
+  },
+  mountain: {
+    light: ["explorer-backpack-50l", "insulated-hiking-bottle"],
+    business: ["explorer-backpack-50l", "universal-travel-adapter", "20-000mah-power-bank"],
+    adventure: ["explorer-backpack-50l", "insulated-hiking-bottle", "weatherproof-tent"]
+  },
+  city: {
+    light: ["anti-theft-daypack", "universal-travel-adapter"],
+    business: ["anti-theft-daypack", "20-000mah-power-bank", "universal-travel-adapter"],
+    adventure: ["anti-theft-daypack", "explorer-backpack-50l", "20-000mah-power-bank"]
+  }
+};
+
+let destination = "";
+let style = "";
+let duration = "";
+
+document.querySelectorAll(".option-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const group = btn.dataset.group;
+    const value = btn.dataset.value;
+
+    document.querySelectorAll(`[data-group="${group}"]`).forEach(item => item.classList.remove("active"));
+    btn.classList.add("active");
+
+    if(group === "destination") destination = value;
+    if(group === "style") style = value;
+    if(group === "duration") duration = value;
+  });
+});
+
+// Change #1: Added money parsing helper function
+function parseMoney(price) {
+  return Number(price.replace(/[^\d]/g, ""));
+}
+
+document.getElementById("build-pack-btn").addEventListener("click", () => {
+  if(!destination || !style || !duration) {
+    alert("Please complete all configurations before building.");
+    return;
+  }
+
+  let products = [...RULES[destination][style]];
+
+  if(duration === "week" && !products.includes("waterproof-travel-pouch")) {
+    products.push("waterproof-travel-pouch");
+  }
+  if(duration === "long" && !products.includes("20-000mah-power-bank")) {
+    products.push("20-000mah-power-bank");
+  }
+
+  // Change #2: Dynamic sum calculation using custom parser matrix mapping
+  const totalValue = products.reduce((sum, handle) => {
+    return sum + parseMoney(PRODUCTS[handle].price);
+  }, 0);
+
+  const html = products.map(handle => {
+    const p = PRODUCTS[handle];
+    let imageSrc = p.image.includes('<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(p.image)}` : p.image;
+
+    // Change #3: Added product-tag node directly wrapping the meta content zone
+    return `
+      <div class="rec-product-card animate-card">
+        <div class="rec-image-wrapper">
+          <img src="${imageSrc}" alt="${p.title}" loading="lazy">
+        </div>
+        <div class="rec-card-details">
+          <span class="product-tag">Recommended</span>
+          <h3>${p.title}</h3>
+          <p class="rec-price">${p.price}</p>
+          <a href="${p.url}" class="rec-action-link">
+            <span>View Details</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const resultsWrapper = document.getElementById("pack-results");
+  resultsWrapper.classList.remove("hidden-state");
+  
+  // Change #4: Injected localized summary details updated to use "$" signature
+  const destinationLabel = {
+    beach: "Beach & Coastal",
+    mountain: "Mountain Terrain",
+    city: "Urban Hubs"
+  };
+
+  const styleLabel = {
+    light: "Lightweight Traveler",
+    business: "Business Elite Traveler",
+    adventure: "Technical Adventurer"
+  };
+
+  const durationLabel = {
+    weekend: "Weekend Getaway",
+    week: "1 Week Journey",
+    long: "Extended 2+ Week Expedition"
+  };
+
+  resultsWrapper.innerHTML = `
+    <div class="results-container">
+
+      <div class="results-header">
+
+        <span class="results-badge">
+          Custom Configuration
+        </span>
+
+        <h2>Your Recommended Travel Pack</h2>
+
+        <p class="recommendation-reason">
+          Generated for a
+          <strong>${destinationLabel[destination]}</strong>
+          trip as a
+          <strong>${styleLabel[style]}</strong>
+          on a
+          <strong>${durationLabel[duration]}</strong>.
+        </p>
+
+        <div class="pack-value">
+          Estimated Pack Value:
+          <strong>$${(totalValue / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong>
+        </div>
+
+      </div>
+
+      <div class="recommendation-grid">
+        ${html}
+      </div>
+
+    </div>
+  `;
+  
+  resultsWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+</script>
+
+{% stylesheet %}
+.smart-pack-builder {
+  padding: 7rem 2rem;
+  background: #ffffff;
+  position: relative;
+}
+
+.smart-pack-builder .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.smart-pack-builder .builder-layout-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 5rem;
+  align-items: flex-start;
+}
+
+.smart-pack-builder .builder-intro-panel .builder-subtitle {
+  color: #ff6b00;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.smart-pack-builder .builder-intro-panel h2 {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.15;
+  margin: 0 0 1.25rem 0;
+  letter-spacing: -0.02em;
+}
+
+.smart-pack-builder .builder-intro-panel p {
+  color: #64748b;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+
+.smart-pack-builder .builder-decor-graphics .decor-line {
+  width: 48px;
+  height: 4px;
+  background: #ff6b00;
+  border-radius: 10px;
+}
+
+.smart-pack-builder .builder-interactive-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.02);
+}
+
+.smart-pack-builder .step-group {
+  margin-bottom: 2.25rem;
+}
+
+.smart-pack-builder .step-group h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+}
+
+.smart-pack-builder .option-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.smart-pack-builder .option-btn {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 1.1rem 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-pack-builder .option-btn .option-icon {
+  color: #64748b;
+  transition: color 0.25s ease;
+}
+
+.smart-pack-builder .option-btn:hover {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.smart-pack-builder .option-btn:hover .option-icon {
+  color: #0f172a;
+}
+
+.smart-pack-builder .option-btn.active {
+  border-color: #ff6b00;
+  background: rgba(255, 107, 0, 0.04);
+  color: #ff6b00;
+  box-shadow: 0 0 0 1px #ff6b00;
+}
+
+.smart-pack-builder .option-btn.active .option-icon {
+  color: #ff6b00;
+}
+
+.smart-pack-builder .builder-submit-cta {
+  width: 100%;
+  border: none;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 1.1rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.smart-pack-builder .builder-submit-cta:hover {
+  background: #ff6b00;
+  transform: translateY(-2px);
+}
+
+.smart-pack-builder .results-viewport.hidden-state {
+  display: none;
+}
+
+.smart-pack-builder .results-container {
+  margin-top: 6rem;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 5rem;
+}
+
+.smart-pack-builder .results-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.smart-pack-builder .results-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: rgba(255, 107, 0, 0.1);
+  color: #ff6b00;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.smart-pack-builder .results-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.smart-pack-builder .recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.smart-pack-builder .rec-product-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-pack-builder .rec-product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.03);
+  border-color: #cbd5e1;
+}
+
+.smart-pack-builder .rec-image-wrapper {
+  width: 100%;
+  height: 240px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.smart-pack-builder .rec-image-wrapper img,
+.smart-pack-builder .rec-image-wrapper svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.smart-pack-builder .rec-card-details {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.smart-pack-builder .rec-card-details h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.smart-pack-builder .rec-price {
+  color: #ff6b00;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.smart-pack-builder .rec-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin-top: auto;
+  transition: color 0.2s ease;
+}
+
+.smart-pack-builder .rec-action-link svg {
+  transition: transform 0.2s ease;
+}
+
+.smart-pack-builder .rec-product-card:hover .rec-action-link {
+  color: #ff6b00;
+}
+
+.smart-pack-builder .rec-product-card:hover .rec-action-link svg {
+  transform: translateX(3px);
+}
+
+.animate-card {
+  animation: builderCardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes builderCardReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 992px) {
+  .smart-pack-builder .builder-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .smart-pack-builder .builder-intro-panel {
+    text-align: center;
+  }
+  .smart-pack-builder .builder-decor-graphics .decor-line {
+    margin: 0 auto;
+  }
+  .smart-pack-builder .recommendation-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .smart-pack-builder {
+    padding: 5rem 1.5rem;
+  }
+  .smart-pack-builder .option-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .smart-pack-builder .recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+  .smart-pack-builder .builder-interactive-card {
+    padding: 1.75rem;
+  }
+}
+
+/* New Modern Typography Style Injections */
+.recommendation-reason {
+  max-width: 700px;
+  margin: 1rem auto 0;
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.pack-value {
+  margin-top: 1rem;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.product-tag {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 4px 10px;
+  background: rgba(255,107,0,.08);
+  color: #ff6b00;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smart Pack Builder",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Smart Pack Builder"
+    }
+  ]
+}
+{% endschema %}
