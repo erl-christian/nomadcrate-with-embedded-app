@@ -304,20 +304,6 @@ shopify theme push
 
 ---
 
-# Screenshots
-
-Add screenshots before submission:
-
-* Home Page
-* Collection Page
-* Product Page
-* Cart Page
-* BundleIQ Dashboard
-* Bundle Management
-* Activity Logs
-
----
-
 # Future Improvements
 
 If more development time were available:
@@ -343,4 +329,5 @@ Bachelor of Science in Information Technology
 Developed for Shopify Take-Home Assessment
 
 ```
+https://github.com/erl-christian
 ```
