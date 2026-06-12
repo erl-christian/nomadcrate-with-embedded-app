@@ -1,0 +1,1 @@
+ALTER TABLE `bundle_products` ADD `product_type` varchar(100);

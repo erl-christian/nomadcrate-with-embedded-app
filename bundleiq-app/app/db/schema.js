@@ -33,9 +33,7 @@ export const bundles = mysqlTable("bundles", {
     .defaultNow(),
 });
 
-export const bundleProducts = mysqlTable(
-  "bundle_products",
-  {
+export const bundleProducts = mysqlTable("bundle_products", {
     id: int("id").autoincrement().primaryKey(),
 
     bundleId: int("bundle_id").notNull(),
@@ -57,6 +55,11 @@ export const bundleProducts = mysqlTable(
         scale: 2,
       }
     ).notNull(),
+
+    productType: varchar(
+      "product_type",
+      { length: 100 }
+    ),
   }
 );
 
@@ -76,4 +79,4 @@ export const activityLogs = mysqlTable(
     createdAt: timestamp("created_at")
       .defaultNow(),
   }
-); 
+);
