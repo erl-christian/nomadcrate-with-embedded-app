@@ -1,333 +1,354 @@
-# NomadCrate & BundleIQ
+# APP_DECISIONS.md
 
-A Shopify storefront and embedded Shopify application built as part of a Shopify Take-Home Assessment.
+## Store Concept
 
----
+### NomadCrate
 
-# Project Overview
+NomadCrate is a fictional Shopify store focused on travel, outdoor, and adventure essentials.
 
-This project consists of two parts:
+The brand targets travelers, hikers, digital nomads, and outdoor enthusiasts who need reliable gear for different types of adventures. Rather than presenting products as isolated purchases, NomadCrate promotes curated shopping experiences through recommended gear combinations and bundle-oriented purchasing.
 
-## Part 1 — NomadCrate Shopify Theme
-
-NomadCrate is a fictional travel and outdoor gear brand designed for adventurers, digital nomads, and explorers.
-
-The storefront focuses on curated shopping experiences and includes a Smart Pack Builder that helps customers discover product combinations based on their travel needs.
-
-### Features
-
-* Custom Home Page
-* Collection Page
-* Product Page
-* Cart Page
-* Responsive Design
-* Shopify Liquid Development
-* Custom Theme Sections
-* Smart Pack Builder Experience
+A key differentiator of the storefront is the Smart Pack Builder, an interactive feature that helps customers discover products and assemble adventure-ready gear packs based on their needs.
 
 ---
 
-## Part 2 — BundleIQ Shopify Embedded App
+# Embedded App Concept
 
-BundleIQ is an embedded Shopify Admin application that helps merchants create, manage, and evaluate product bundles.
+## BundleIQ
 
-The application provides bundle intelligence through scoring, rankings, recommendations, alerts, and bundle analytics.
+BundleIQ is a Shopify Embedded App designed to help merchants create, evaluate, and optimize product bundles.
 
-### Features
+Many merchants create bundles using intuition or manual product selection without clear insight into bundle quality, cross-sell opportunities, or overall bundle effectiveness. BundleIQ addresses this challenge by providing scoring, analytics, and recommendations that help merchants make more informed merchandising decisions.
 
-* Bundle Dashboard
-* Create Bundle
-* Edit Bundle
-* Delete Bundle
-* Activity Tracking
-* Opportunity Scoring
-* Bundle Health Analysis
-* Ranking System
-* Recommendations Engine
-* Alert System
-* Potential AOV Insights
+The application focuses on:
+
+* Bundle creation and management
+* Bundle opportunity scoring
+* Bundle rankings
+* Bundle health analysis
+* Merchant recommendations
+* Activity tracking
+
+The goal is to transform bundle creation from a manual process into a data-informed workflow.
 
 ---
 
-# Technology Stack
+# Problem Being Solved
 
-## Theme
+Product bundling is a common merchandising strategy, but merchants often lack visibility into the quality and effectiveness of the bundles they create.
+
+Common challenges include:
+
+* Determining whether a bundle provides enough value
+* Identifying weak bundle combinations
+* Measuring product diversity within bundles
+* Discovering cross-sell opportunities
+* Prioritizing which bundles should be promoted
+
+BundleIQ provides actionable insights that help merchants create stronger bundles and improve bundle performance.
+
+---
+
+# Key Architecture Decisions
+
+## Shopify Theme
+
+The storefront was built using:
 
 * Shopify Liquid
 * CSS
 * Minimal JavaScript
 
+The theme prioritizes maintainability and merchant flexibility by leveraging Shopify's section-based architecture.
+
+Custom sections include:
+
+* Hero Section
+* Featured Collections
+* Adventure Categories
+* Featured Products
+* Smart Pack Builder
+
+The Smart Pack Builder was selected as the primary interactive feature because it aligns with the store's adventure-focused brand while demonstrating custom storefront functionality beyond standard Shopify themes.
+
+---
+
 ## Embedded App
 
-### Frontend
+The embedded application was built using:
 
 * React
 * React Router
 * Vite
-
-### Backend
-
 * Node.js
-
-### Database
-
-* MySQL
-* Drizzle ORM
-
-### Shopify
-
-* Shopify Admin API
 * Shopify App Bridge
-* Embedded App Architecture
+* Shopify Admin API
+* Drizzle ORM
+* MySQL
+
+The Shopify React Router template was used as the foundation because it provides:
+
+* Shopify OAuth authentication
+* Embedded app support
+* Session management
+* Shopify Admin integration
+
+This allowed development efforts to focus on solving the merchant workflow problem rather than building authentication infrastructure from scratch.
 
 ---
 
-# Project Structure
+## Authentication and Embedded App Flow
 
-```text
-qtech-shopify-project/
+BundleIQ uses Shopify OAuth through Shopify's embedded app architecture.
 
-├── nomadcrate-theme/
-│
-├── bundleiq-app/
-│   ├── app/
-│   ├── prisma/
-│   ├── public/
-│   ├── drizzle/
-│   └── ...
-│
-├── README.md
-│
-└── APP_DECISIONS.md
-```
+Store owners and staff authenticate through Shopify Admin, and access to the application is managed through Shopify's authentication and session system.
+
+A separate authentication system was intentionally not implemented because Shopify OAuth already provides secure authentication and authorization for embedded applications.
+
+This decision reduces complexity and follows Shopify platform best practices.
 
 ---
 
-# Database Schema
+# Database Design
+
+BundleIQ uses MySQL with Drizzle ORM.
+
+The database design separates bundle management, bundle-product relationships, and activity tracking into dedicated tables.
 
 ## bundles
 
 Stores bundle information.
 
-| Column      | Type      |
-| ----------- | --------- |
-| id          | INT       |
-| name        | VARCHAR   |
-| description | TEXT      |
-| score       | INT       |
-| status      | VARCHAR   |
-| createdAt   | TIMESTAMP |
-| updatedAt   | TIMESTAMP |
+Fields:
+
+* id
+* name
+* description
+* score
+* status
+* createdAt
+* updatedAt
 
 ---
 
 ## bundle_products
 
-Stores products belonging to a bundle.
+Stores products associated with a bundle.
 
-| Column        | Type    |
-| ------------- | ------- |
-| id            | INT     |
-| bundleId      | INT     |
-| productHandle | VARCHAR |
-| productTitle  | VARCHAR |
-| productPrice  | DECIMAL |
-| productType   | VARCHAR |
+Fields:
+
+* id
+* bundleId
+* productHandle
+* productTitle
+* productPrice
+* productType
 
 Relationship:
 
-* Many bundle products belong to one bundle.
+* Many bundle products belong to one bundle
 
 ---
 
 ## activity_logs
 
-Stores bundle history.
+Stores bundle activity history.
 
-| Column    | Type      |
-| --------- | --------- |
-| id        | INT       |
-| bundleId  | INT       |
-| action    | VARCHAR   |
-| details   | TEXT      |
-| createdAt | TIMESTAMP |
+Fields:
+
+* id
+* bundleId
+* action
+* details
+* createdAt
 
 Relationship:
 
-* Many activity logs belong to one bundle.
+* Many activity logs belong to one bundle
+
+The activity log provides an audit trail of bundle-related actions and supports future enhancements such as user attribution and collaboration tracking.
 
 ---
 
-# BundleIQ Analytics
+# Logic-Based Features
 
-BundleIQ evaluates bundle quality using multiple metrics:
+A primary requirement of the project was demonstrating functionality beyond basic CRUD operations.
+
+BundleIQ includes several logic-driven features designed to support merchant decision-making.
 
 ## Opportunity Score
 
-Measures overall bundle potential.
+The Opportunity Score is BundleIQ's primary evaluation metric.
 
-Factors include:
+Bundles are scored using factors such as:
 
-* Product Count
-* Bundle Value
-* Category Coverage
+* Product count
+* Bundle value
+* Category diversity
+* Cross-sell potential
 
----
-
-## Bundle Health Score
-
-Evaluates overall bundle composition quality.
+The score allows merchants to quickly identify stronger bundle opportunities and prioritize bundles with greater merchandising potential.
 
 ---
 
 ## Bundle Rankings
 
-Ranks bundles by score.
+Bundles are automatically ranked according to their Opportunity Score.
+
+This allows merchants to quickly identify top-performing bundle opportunities without manually reviewing every bundle.
 
 ---
 
-## Recommendations
+## Bundle Health Analysis
 
-Provides merchant recommendations such as:
+Bundle health evaluates bundle composition using:
 
-* Promote High Opportunity Bundles
-* Improve Medium Opportunity Bundles
-* Review Low Opportunity Bundles
+* Product count
+* Category coverage
+* Bundle value
 
----
-
-## Alerts
-
-Detects:
-
-* Low Bundle Value
-* Low Category Coverage
-* Weak Bundle Composition
+This provides merchants with a simple indicator of overall bundle quality.
 
 ---
 
 ## Potential AOV Increase
 
-Estimates potential Average Order Value impact based on bundle composition.
+BundleIQ estimates potential Average Order Value (AOV) improvement based on the value and composition of a bundle.
+
+The feature provides directional insights rather than exact revenue predictions.
 
 ---
 
-# Installation
+## Recommendations
 
-## Prerequisites
+BundleIQ generates recommendations to guide merchant actions.
 
-* Node.js
-* npm
-* MySQL
-* Shopify CLI
-* Shopify Partner Account
-* Shopify Development Store
+Examples include:
 
----
-
-# Embedded App Setup
-
-Navigate to the application directory:
-
-```bash
-cd bundleiq-app
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Create environment variables:
-
-```env
-SHOPIFY_API_KEY=
-SHOPIFY_API_SECRET=
-SCOPES=
-SHOPIFY_APP_URL=
-
-DATABASE_URL=
-```
+* Promote high-performing bundles
+* Improve medium-performing bundles
+* Review low-performing bundles
+* Increase category diversity
+* Add complementary products
 
 ---
 
-# Database Setup
+## Alerts
 
-Create a MySQL database.
+Alerts help merchants identify potentially weak bundles.
 
-Example:
+Examples include:
 
-```sql
-CREATE DATABASE bundleiq;
-```
-
-Run Drizzle migrations:
-
-```bash
-npx drizzle-kit migrate
-```
+* Low bundle value
+* Limited category diversity
+* Low Opportunity Score
+* Small product count
 
 ---
 
-# Run Application
+# Tradeoffs
 
-Start Shopify development server:
+## Simplified Analytics
 
-```bash
-shopify app dev
-```
+Opportunity Scores and AOV estimates are heuristic-based rather than derived from historical sales data.
 
-The application will be available through the Shopify Admin embedded app preview URL.
+This approach was intentionally chosen because merchants may want to evaluate bundles before sufficient sales history exists.
 
----
-
-# Theme Setup
-
-Navigate to the theme directory:
-
-```bash
-cd nomadcrate-theme
-```
-
-Run:
-
-```bash
-shopify theme dev
-```
-
-Push theme:
-
-```bash
-shopify theme push
-```
+The MVP prioritizes immediate usability over complex analytical models.
 
 ---
 
-# Future Improvements
+## Shopify Product Synchronization
 
-If more development time were available:
+BundleIQ retrieves product information directly from Shopify during bundle creation instead of maintaining a separate product catalog.
 
-* Sales-Based Analytics
-* Order Data Integration
-* Automated Bundle Suggestions
-* Revenue Forecasting
-* Historical Performance Trends
-* Merchant Notifications
-* Advanced Dashboard Visualizations
+Benefits include:
+
+* Reduced data duplication
+* Improved consistency
+* Lower maintenance overhead
 
 ---
 
-# Author
+## Authentication Scope
 
-Erl Christian L. Albuena
+A separate role-based access control (RBAC) system was intentionally not implemented.
 
-Bachelor of Science in Information Technology
+Because BundleIQ operates as a Shopify Embedded App, authentication and access control are already handled through Shopify OAuth and Shopify Admin permissions.
 
-2026 Graduate
+The MVP focuses on bundle optimization and merchant workflow improvement rather than duplicating Shopify's user management functionality.
 
-Developed for Shopify Take-Home Assessment
+---
 
-```
-https://github.com/erl-christian
-```
+## Focused MVP Scope
+
+BundleIQ intentionally focuses on bundle intelligence rather than inventory management, order management, or advanced reporting.
+
+This decision keeps the application aligned with a single merchant workflow and demonstrates stronger product focus.
+
+---
+
+# What I Would Improve With More Time
+
+If additional development time were available, the following enhancements would be implemented:
+
+## Real Sales Analytics
+
+Leverage Shopify Orders API data to calculate:
+
+* Bundle conversion rates
+* Revenue contribution
+* Actual AOV improvement
+* Bundle revenue performance
+
+---
+
+## Automated Bundle Suggestions
+
+Generate bundle recommendations using:
+
+* Product categories
+* Product relationships
+* Purchase behavior
+* Historical sales data
+
+---
+
+## Historical Trend Analysis
+
+Track bundle performance over time using:
+
+* Trend reports
+* Historical score changes
+* Bundle lifecycle analytics
+
+---
+
+## Merchant Notifications
+
+Notify merchants when:
+
+* Bundle performance declines
+* High-performing bundles emerge
+* New opportunities are identified
+
+---
+
+## Advanced Dashboard Analytics
+
+Introduce richer visual analytics including:
+
+* Revenue trends
+* Bundle performance charts
+* Category performance comparisons
+* Historical bundle rankings
+
+---
+
+# Conclusion
+
+NomadCrate and BundleIQ were designed to demonstrate Shopify theme development, embedded application architecture, database design, merchant workflow optimization, and product thinking.
+
+The project emphasizes actionable merchant insights, bundle optimization, and data-informed decision making rather than simple CRUD functionality.
+
+The overall objective was to create a practical Shopify solution that provides measurable value to merchants while maintaining a focused and scalable MVP architecture.
