@@ -94,7 +94,7 @@
 .travel-categories .category-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  border-radius: 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -151,22 +151,27 @@
 .travel-categories .category-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  color: #0f172a;
-  font-weight: 700;
+  background: #0f172a; 
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px; 
+  font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   align-self: flex-start;
 }
 
 .travel-categories .category-btn svg {
-  color: #ff6b00;
+  color: #ffffff;
   transition: transform 0.3s ease;
 }
 
 .travel-categories .category-card:hover .category-btn {
-  color: #ff6b00;
+  background: #f97316; 
+  color: #ffffff;
 }
 
 .travel-categories .category-card:hover .category-btn svg {

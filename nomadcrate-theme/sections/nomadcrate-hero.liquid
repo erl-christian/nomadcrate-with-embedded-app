@@ -45,7 +45,7 @@
             <a href="{{ section.settings.btn_link }}" class="nc-btn-primary">
               <span class="nc-btn-label">{{ section.settings.btn_label | escape }}</span>
               <span class="nc-btn-arrow-wrapper">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </span>
             </a>
           </div>
@@ -68,7 +68,7 @@
                   {%- if block.settings.card_link != blank -%}
                     <a href="{{ block.settings.card_link }}" class="nc-card-action-link">
                       {{ block.settings.card_link_label | escape }} 
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </a>
                   {%- endif -%}
                 </div>
@@ -85,12 +85,12 @@
 .nc-hero-section {
   position: relative;
   height: 100vh;
-  height: 100svh; /* Modern small viewport height handles mobile browser bars beautifully */
+  height: 100svh;
   display: flex;
   align-items: center;
   overflow: hidden;
-  background-color: #090d16;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #0f1115;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .nc-hero-media-vault {
@@ -107,7 +107,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  animation: ncScaleKenBurns 24s ease-out forwards;
+  animation: ncScaleKenBurns 28s ease-out forwards;
 }
 
 .nc-hero-cinematic-overlay {
@@ -118,9 +118,9 @@
   height: 100%;
   background: linear-gradient(
     to right,
-    rgba(9, 13, 22, 0.95) 0%,
-    rgba(9, 13, 22, 0.8) 40%,
-    rgba(9, 13, 22, 0.4) 100%
+    rgba(15, 17, 21, 0.9) 0%,
+    rgba(15, 17, 21, 0.7) 45%,
+    rgba(15, 17, 21, 0.3) 100%
   );
 }
 
@@ -128,7 +128,7 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem; /* Tightened up layout space to prevent text spills on short displays */
+  padding: 2rem 3rem;
   position: relative;
   z-index: 2;
   max-height: 100%;
@@ -153,63 +153,65 @@
 .nc-hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 6px 14px;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 16px;
   border-radius: 100px;
-  margin-bottom: 1.5rem;
-  backdrop-filter: blur(4px);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
 }
 
 .nc-badge-dot {
   width: 6px;
   height: 6px;
-  background-color: #f97316;
+  background-color: #d97706; /* Sunset Amber */
   border-radius: 50%;
-  box-shadow: 0 0 10px #f97316;
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.8);
+  animation: ncPulseBeacon 2.5s infinite;
 }
 
 .nc-badge-text {
-  color: #e2e8f0;
-  font-size: 0.85rem;
+  color: #f8fafc;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
 .nc-hero-editorial-title {
   color: #ffffff;
-  line-height: 1.05;
-  margin: 0 0 1.25rem 0;
-  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 1.5rem 0;
   display: flex;
   flex-direction: column;
 }
 
 .nc-title-light {
-  font-size: clamp(2rem, 4.5vw, 4.5rem); /* Normalized clamps so typography doesn't break full-screen rules */
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
   font-weight: 300;
-  color: #f1f5f9;
+  color: #e2e8f0;
   font-family: "Playfair Display", "Didot", "Georgia", serif;
   font-style: italic;
+  letter-spacing: -0.01em;
 }
 
 .nc-title-bold {
-  font-size: clamp(2.2rem, 5vw, 5rem);
-  font-weight: 800;
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: -0.03em;
   background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .nc-hero-paragraph {
-  color: #94a3b8;
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.5;
-  max-width: 540px;
-  margin: 0 0 2rem 0;
+  color: #cbd5e1;
+  font-size: clamp(1.05rem, 1.5vw, 1.15rem);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 0 2.5rem 0;
   font-weight: 400;
 }
 
@@ -217,43 +219,43 @@
   display: inline-flex;
   align-items: center;
   background-color: #ffffff;
-  color: #090d16;
+  color: #0f1115;
   text-decoration: none;
-  padding: 4px 6px 4px 28px;
+  padding: 6px 6px 6px 32px;
   border-radius: 100px;
   font-weight: 600;
   font-size: 0.95rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.02em;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
 .nc-btn-arrow-wrapper {
-  width: 44px;
-  height: 44px;
-  background-color: #f97316;
+  width: 42px;
+  height: 42px;
+  background-color: #d97706; /* Sunset Amber */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  margin-left: 18px;
+  margin-left: 24px;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nc-btn-arrow-wrapper svg {
   width: 18px;
   height: 18px;
+  transition: transform 0.3s ease;
 }
 
 .nc-btn-primary:hover {
   background-color: #f8fafc;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(249, 115, 22, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
 .nc-btn-primary:hover .nc-btn-arrow-wrapper {
-  transform: rotate(-45deg);
+  transform: translateX(4px);
 }
 
 .nc-hero-interactive-wing {
@@ -263,42 +265,47 @@
 }
 
 .nc-glass-card {
-  background: rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 1.25rem;
-  border-radius: 20px;
+  background: rgba(20, 20, 25, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  max-width: 360px;
+  max-width: 380px;
   width: 100%;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  transform: rotate(2deg);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: translateY(0);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nc-glass-card:hover {
-  transform: rotate(0deg) translateY(-8px);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 30px 60px rgba(249, 115, 22, 0.1);
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(30, 30, 35, 0.45);
+  box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.6);
 }
 
 .nc-card-thumb {
-  width: 80px;
-  height: 80px;
-  background-color: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
+  width: 85px;
+  height: 85px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
   overflow: hidden;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nc-thumb-asset {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.nc-glass-card:hover .nc-thumb-asset {
+  transform: scale(1.05);
 }
 
 .nc-card-details {
@@ -307,19 +314,19 @@
 }
 
 .nc-card-tag {
-  color: #f97316;
+  color: #d97706; /* Sunset Amber */
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
 }
 
 .nc-card-heading {
   color: #ffffff;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   line-height: 1.3;
 }
 
@@ -330,23 +337,38 @@
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   transition: color 0.2s ease;
 }
 
-.nc-card-action-link:hover {
+.nc-card-action-link svg {
+  transition: transform 0.2s ease;
+}
+
+.nc-glass-card:hover .nc-card-action-link {
   color: #ffffff;
 }
 
+.nc-glass-card:hover .nc-card-action-link svg {
+  transform: translateX(4px);
+}
+
+/* Animations */
 @keyframes ncScaleKenBurns {
-  from { transform: scale(1.06); }
+  from { transform: scale(1.08); }
   to { transform: scale(1.0); }
+}
+
+@keyframes ncPulseBeacon {
+  0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(217, 119, 6, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
 }
 
 .animate-item {
   opacity: 0;
-  transform: translateY(25px);
-  animation: ncSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(30px);
+  animation: ncSlideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .nc-hero-narrative .animate-item:nth-child(1) { animation-delay: 0.1s; }
@@ -356,27 +378,27 @@
 
 .animate-card {
   opacity: 0;
-  transform: scale(0.9) rotate(5deg);
-  animation: ncCardPopIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  transform: translateY(20px);
+  animation: ncCardSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
 }
 
 @keyframes ncSlideUpFade {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes ncCardPopIn {
-  to { opacity: 1; transform: scale(1) rotate(2deg); }
+@keyframes ncCardSlideIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
+/* Responsive Overrides */
 @media screen and (max-width: 1100px) {
   .nc-hero-master-grid {
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 2rem;
+    gap: 3rem;
   }
 }
 
 @media screen and (max-width: 992px) {
-  /* Enforces 100vh on Tablet & Mobile instead of dropping to auto height */
   .nc-hero-section {
     height: 100vh;
     height: 100svh;
@@ -386,15 +408,19 @@
   .nc-hero-cinematic-overlay {
     background: linear-gradient(
       180deg,
-      rgba(9, 13, 22, 0.9) 0%,
-      rgba(9, 13, 22, 0.85) 60%,
-      rgba(9, 13, 22, 0.95) 100%
+      rgba(15, 17, 21, 0.8) 0%,
+      rgba(15, 17, 21, 0.6) 50%,
+      rgba(15, 17, 21, 0.9) 100%
     );
+  }
+
+  .nc-hero-viewport {
+    padding: 2rem;
   }
 
   .nc-hero-master-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 3rem;
     text-align: center;
   }
 
@@ -404,11 +430,11 @@
 
   .nc-hero-editorial-title {
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
   }
   
   .nc-hero-paragraph {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .nc-hero-interactive-wing {
@@ -416,12 +442,7 @@
   }
   
   .nc-glass-card {
-    transform: rotate(0deg);
-    max-width: 400px;
-  }
-  
-  @keyframes ncCardPopIn {
-    to { opacity: 1; transform: scale(1) rotate(0deg); }
+    max-width: 420px;
   }
 }
 
@@ -436,13 +457,13 @@
   }
 
   .nc-glass-card {
-    padding: 1rem;
+    padding: 1.25rem;
     gap: 1rem;
   }
 
   .nc-card-thumb {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
   }
 }
 {% endstylesheet %}
