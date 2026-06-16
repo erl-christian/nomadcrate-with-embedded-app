@@ -1,18 +1,15 @@
 <header class="nc-global-header">
   <div class="header-container">
     
-    <!-- Mobile Hamburger Toggle -->
     <button type="button" class="mobile-menu-toggle" aria-label="Toggle menu" aria-controls="mobile-nav" aria-expanded="false">
       <svg class="icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
       <svg class="icon-close hidden-state" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
 
-    <!-- Brand Logo -->
     <a href="/" class="header-brand-logo">
       Nomad<span>Crate</span>
     </a>
     
-    <!-- Desktop Navigation Menu -->
     <nav class="header-navigation-menu desktop-only" aria-label="Main Navigation">
       {% for link in linklists.main-menu.links %}
         <a href="{{ link.url }}" class="nav-link-item {% if link.active %}active-route{% endif %}">
@@ -21,7 +18,6 @@
       {% endfor %}
     </nav>
 
-    <!-- Actions Tray (Cart) -->
     <div class="header-actions-tray">
       <a href="/cart" class="header-cart-trigger" aria-label="View Cart">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -33,7 +29,6 @@
 
   </div>
 
-  <!-- Mobile Drawer Dropdown Menu -->
   <nav id="mobile-nav" class="mobile-navigation-drawer hidden-state" aria-label="Mobile Navigation">
     {% for link in linklists.main-menu.links %}
       <a href="{{ link.url }}" class="mobile-nav-link-item {% if link.active %}active-route{% endif %}">
@@ -43,173 +38,49 @@
   </nav>
 </header>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.querySelector('.mobile-menu-toggle');
-  const mobileNav = document.getElementById('mobile-nav');
-  const iconMenu = toggleBtn?.querySelector('.icon-menu');
-  const iconClose = toggleBtn?.querySelector('.icon-close');
-
-  toggleBtn?.addEventListener('click', () => {
-    const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-    
-    // Toggle state management values
-    toggleBtn.setAttribute('aria-expanded', !isExpanded);
-    mobileNav.classList.toggle('hidden-state');
-    iconMenu.classList.toggle('hidden-state');
-    iconClose.classList.toggle('hidden-state');
-    
-    // Smooth overflow blocking logic
-    document.body.style.overflow = isExpanded ? '' : 'hidden';
-  });
-});
-</script>
-
 {% stylesheet %}
 .nc-global-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: 1.25rem 2rem;
+  background: #ffffff; border-bottom: 1px solid #f1f5f9;
+  position: sticky; top: 0; z-index: 100; padding: 1.25rem 2rem;
 }
-.header-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.header-brand-logo {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #0f172a;
-  text-decoration: none;
-  letter-spacing: -0.03em;
-}
-.header-brand-logo span {
-  color: #ff6b00;
-}
-.header-navigation-menu {
-  display: flex;
-  gap: 2.5rem;
-}
-.nav-link-item {
-  text-decoration: none;
-  color: #475569;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-.nav-link-item:hover, .nav-link-item.active-route {
-  color: #ff6b00;
-}
-.header-actions-tray {
-  display: flex;
-  align-items: center;
-}
-.header-cart-trigger {
-  color: #0f172a;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+.header-container { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.header-brand-logo { font-size: 1.35rem; font-weight: 800; color: #0f172a; text-decoration: none; letter-spacing: -0.03em; transition: transform 0.3s ease; }
+.header-brand-logo:hover { transform: scale(1.02); }
+.header-brand-logo span { color: #ff6b00; }
+
+.header-navigation-menu { display: flex; gap: 2.5rem; }
+.nav-link-item { position: relative; text-decoration: none; color: #475569; font-size: 0.95rem; font-weight: 600; transition: color 0.25s ease; padding: 4px 0; }
+.nav-link-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: #ff6b00; transition: width 0.25s ease; }
+.nav-link-item:hover::after, .nav-link-item.active-route::after { width: 100%; }
+.nav-link-item:hover, .nav-link-item.active-route { color: #0f172a; }
+
+.header-cart-trigger { color: #0f172a; position: relative; display: flex; align-items: center; transition: transform 0.2s ease; }
+.header-cart-trigger:hover { transform: scale(1.1); color: #ff6b00; }
 .cart-indicator-dot {
-  position: absolute;
-  top: -8px;
-  right: -10px;
-  background: #ff6b00;
-  color: #ffffff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute; top: -8px; right: -10px; background: #ff6b00; color: #ffffff;
+  font-size: 0.65rem; font-weight: 700; width: 17px; height: 17px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
 }
 
-/* Mobile Specific UI Controls */
-.mobile-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: #0f172a;
-  cursor: pointer;
-  padding: 0;
-}
-.mobile-menu-toggle.hidden-state, .icon-menu.hidden-state, .icon-close.hidden-state {
-  display: none !important;
-}
+.mobile-menu-toggle { display: none; background: none; border: none; color: #0f172a; cursor: pointer; padding: 0; }
+.mobile-menu-toggle.hidden-state, .icon-menu.hidden-state, .icon-close.hidden-state { display: none !important; }
 
 .mobile-navigation-drawer {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 100%);
-  background: #ffffff;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  border-top: 1px solid #f1f5f9;
-  animation: mobileMenuSlideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: absolute; top: 100%; left: 0; width: 100%; height: calc(100vh - 100%);
+  background: #ffffff; padding: 2rem; display: flex; flex-direction: column; gap: 1.75rem;
+  border-top: 1px solid #f1f5f9; animation: mobileMenuSlideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-.mobile-navigation-drawer.hidden-state {
-  display: none !important;
-}
+.mobile-navigation-drawer.hidden-state { display: none !important; }
+.mobile-nav-link-item { text-decoration: none; color: #334155; font-size: 1.25rem; font-weight: 600; padding-bottom: 0.5rem; border-bottom: 1px solid #f1f5f9; transition: all 0.2s ease; }
+.mobile-nav-link-item:hover, .mobile-nav-link-item.active-route { color: #ff6b00; padding-left: 8px; border-color: rgba(255, 107, 0, 0.2); }
 
-.mobile-nav-link-item {
-  text-decoration: none;
-  color: #334155;
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #f1f5f9;
-  transition: color 0.2s ease;
-}
-.mobile-nav-link-item:hover, .mobile-nav-link-item.active-route {
-  color: #ff6b00;
-  border-color: rgba(255, 107, 0, 0.1);
-}
+@keyframes mobileMenuSlideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes mobileMenuSlideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive Structural Breakpoint Break */
 @media screen and (max-width: 768px) {
-  .nc-global-header {
-    padding: 1rem 1.5rem;
-  }
-  .desktop-only {
-    display: none !important;
-  }
-  .mobile-menu-toggle {
-    display: block;
-    order: 1;
-  }
-  .header-brand-logo {
-    order: 2;
-    font-size: 1.25rem;
-    margin-left: auto;
-    margin-right: auto;
-    transform: translateX(10px); /* Offsets cart icon weight space balance */
-  }
-  .header-actions-tray {
-    order: 3;
-    margin-left: auto;
-  }
+  .nc-global-header { padding: 1rem 1.5rem; }
+  .desktop-only { display: none !important; }
+  .mobile-menu-toggle { display: block; order: 1; }
+  .header-brand-logo { order: 2; font-size: 1.25rem; margin-left: auto; margin-right: auto; transform: translateX(10px); }
+  .header-actions-tray { order: 3; margin-left: auto; }
 }
 {% endstylesheet %}
-
-{% schema %}
-{
-  "name": "Global Header",
-  "settings": []
-}
-{% endschema %}

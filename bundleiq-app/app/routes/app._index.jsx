@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import { db } from "../db/index";
-import { bundles, bundleProducts, activityLogs } from "../db/schema";
+import { bundles, bundleProducts, activityLogs, packBuilderRequests } from "../db/schema";
 import { desc } from "drizzle-orm";
 import "../tailwind.css";
 
@@ -58,6 +58,9 @@ export const loader = async ({ request }) => {
   const allBundles = await db.select().from(bundles);
   const allBundleProducts = await db.select().from(bundleProducts);
   const recentLogs = await db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt)).limit(4);
+  const packRequests = await db
+    .select()
+    .from(packBuilderRequests);
 
   const totalBundles = allBundles.length;
   const activeBundles = allBundles.filter((bundle) => bundle.status === "active").length;
@@ -74,6 +77,38 @@ export const loader = async ({ request }) => {
       analytics: calculateBundleAnalytics(bundle, allBundleProducts)
     }));
 
+    const packConfigStats = {};
+
+    packRequests.forEach((request) => {
+
+      const key =
+        `${request.destination}-${request.travelStyle}-${request.tripLength}`;
+
+      if (!packConfigStats[key]) {
+        packConfigStats[key] = {
+          destination: request.destination,
+          travelStyle: request.travelStyle,
+          tripLength: request.tripLength,
+          count: 0,
+        };
+      }
+
+      packConfigStats[key].count++;
+    });
+
+    const topPackConfigs =
+      Object.values(packConfigStats)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
+  const latestPackRequests =  await db
+    .select()
+    .from(packBuilderRequests)
+    .orderBy(
+      desc(packBuilderRequests.createdAt)
+    )
+    .limit(5);
+
   const topBundle = topBundles.length > 0 ? topBundles[0] : null;
   const topBundleAnalytics = topBundle ? topBundle.analytics : null;
 
@@ -85,6 +120,8 @@ export const loader = async ({ request }) => {
     topBundle,
     topBundleAnalytics,
     recentLogs,
+    latestPackRequests,
+    topPackConfigs,
   };
 };
 
@@ -99,7 +136,9 @@ export default function Index() {
     topBundles,
     topBundle,
     topBundleAnalytics,
-    recentLogs
+    recentLogs,
+    latestPackRequests,
+    topPackConfigs,
   } = useLoaderData();
 
   return (
@@ -216,6 +255,85 @@ export default function Index() {
           </div>
         </section>
 
+        {/* RECENT SMART PACK ACTIVITY */}
+        <section className="p-6 bg-white border border-gray-100 shadow-sm rounded-3xl">
+
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-bold text-gray-900">
+              Recent Smart Pack Activity
+            </h2>
+
+            <span className="text-xs font-medium text-gray-400">
+              Latest Pack Builder Requests
+            </span>
+          </div>
+
+          {latestPackRequests.length > 0 ? (
+
+            <div className="overflow-hidden border border-gray-100 rounded-2xl">
+
+              {/* Table Header */}
+              <div className="grid grid-cols-5 px-4 py-3 text-xs font-bold tracking-wider text-gray-500 uppercase border-b border-gray-100 bg-gray-50">
+
+                <div>User</div>
+
+                <div>Destination</div>
+
+                <div>Style</div>
+
+                <div>Duration</div>
+
+                <div>Type</div>
+
+              </div>
+
+              {/* Table Rows */}
+              {latestPackRequests.map((request) => (
+
+                <div
+                  key={request.id}
+                  className="grid grid-cols-5 px-4 py-4 text-sm transition-colors border-b border-gray-100 last:border-b-0 hover:bg-gray-50"
+                >
+
+                  <div className="font-semibold text-gray-900 truncate">
+                    {request.customerName || "Guest"}
+                  </div>
+
+                  <div className="text-gray-600">
+                    {request.destination}
+                  </div>
+
+                  <div className="text-gray-600">
+                    {request.travelStyle}
+                  </div>
+
+                  <div className="text-gray-600">
+                    {request.tripLength}
+                  </div>
+
+                  <div>
+                    <span className="inline-flex px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-full">
+                      {request.customerType}
+                    </span>
+                  </div>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          ) : (
+
+            <div className="py-12 text-center border border-gray-200 border-dashed rounded-2xl">
+              <p className="text-gray-500">
+                No Smart Pack activity yet.
+              </p>
+            </div>
+
+          )}
+
+        </section>
         {/* MAIN SPLIT VIEW */}
         <div className="grid items-start grid-cols-1 gap-8 lg:grid-cols-3">
 

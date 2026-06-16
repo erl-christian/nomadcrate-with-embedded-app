@@ -1,564 +1,656 @@
-<section class="nc-hero-section section-{{ section.id }}" aria-label="NomadCrate Advanced Hero">
-  <div class="nc-hero-media-vault">
-    {%- if section.settings.bg_image != blank -%}
-      {{ section.settings.bg_image | image_url: width: 2200 | image_tag: 
-        loading: 'eager', 
-        sizes: '100vw', 
-        widths: '375, 550, 750, 1100, 1500, 1780, 2200',
-        class: 'nc-hero-img-asset'
-      }}
-    {%- else -%}
-      <img 
-        src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=2200&q=80" 
-        class="nc-hero-img-asset" 
-        loading="eager" 
-        alt="NomadCrate Premium Adventure Background"
-      >
-    {%- endif -%}
-    <div class="nc-hero-cinematic-overlay"></div>
-  </div>
+<section 
+  class="nc-hero" 
+  aria-label="NomadCrate Hero" 
+  id="ncHero-{{ section.id }}"
+  {% if section.settings.bg_image %}style="--bg-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');"{% endif %}
+>
 
-  <div class="nc-hero-viewport">
-    <div class="nc-hero-master-grid">
+  <div class="nc-stage">
+    <div class="nc-stage__copy nc-reveal-left">
+      {%- if section.settings.tagline != blank -%}
+        <div class="nc-eyebrow">
+          <span class="nc-eyebrow__dot"></span>
+          <span>{{ section.settings.tagline | escape }}</span>
+        </div>
+      {%- endif -%}
+
+      <h1 class="nc-headline">
+        <span class="nc-headline__hollow nc-reveal-up">{{ section.settings.title_part_1 | default: 'Gear Built' }}</span>
+        <span class="nc-headline__solid nc-reveal-up nc-reveal-up--delay">{{ section.settings.title_part_2 | default: 'For The Road' }}</span>
+      </h1>
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="nc-subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+
+      <div class="nc-cta-row">
+        {%- if section.settings.btn_label != blank -%}
+          <a href="{{ section.settings.btn_link | default: '/collections/all' }}" class="nc-btn nc-btn--primary">
+            <span>{{ section.settings.btn_label | escape }}</span>
+            <span class="nc-btn__arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </a>
+        {%- endif -%}
+        <a href="{{ section.settings.secondary_link | default: '/collections/new' }}" class="nc-btn nc-btn--ghost">
+          <span class="nc-btn__icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16" fill="currentColor"/>
+            </svg>
+          </span>
+          {{ section.settings.secondary_label | default: "What's New" }}
+        </a>
+      </div>
+    </div>
+
+    <div class="nc-stage__focal nc-reveal-up">
+      <div class="nc-focal__backdrop"></div>
       
-      <div class="nc-hero-narrative">
-        {%- if section.settings.tagline != blank -%}
-          <div class="nc-hero-badge animate-item">
-            <span class="nc-badge-dot"></span>
-            <span class="nc-badge-text">{{ section.settings.tagline | escape }}</span>
-          </div>
-        {%- endif -%}
-
-        <h1 class="nc-hero-editorial-title animate-item">
-          <span class="nc-title-light">{{ section.settings.title_part_1 }}</span>
-          <span class="nc-title-bold">{{ section.settings.title_part_2 }}</span>
-        </h1>
-
-        {%- if section.settings.subheading != blank -%}
-          <p class="nc-hero-paragraph animate-item">
-            {{ section.settings.subheading | escape }}
-          </p>
-        {%- endif -%}
-
-        {%- if section.settings.btn_label != blank and section.settings.btn_link != blank -%}
-          <div class="nc-hero-cta-group animate-item">
-            <a href="{{ section.settings.btn_link }}" class="nc-btn-primary">
-              <span class="nc-btn-label">{{ section.settings.btn_label | escape }}</span>
-              <span class="nc-btn-arrow-wrapper">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </span>
-            </a>
-          </div>
-        {%- endif -%}
+      <div class="nc-focal__star" aria-hidden="true">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="50,2 62,38 98,38 69,60 80,96 50,76 20,96 31,60 2,38 38,38" fill="white"/>
+        </svg>
       </div>
 
-      <div class="nc-hero-interactive-wing">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when 'spotlight_card' -%}
-              <div class="nc-glass-card animate-card" {{ block.shopify_attributes }}>
-                {%- if block.settings.card_image != blank -%}
-                  <div class="nc-card-thumb">
-                    {{ block.settings.card_image | image_url: width: 300 | image_tag: loading: 'lazy', class: 'nc-thumb-asset' }}
-                  </div>
+      <div class="nc-focal__frame">
+        {%- if section.settings.hero_image != blank -%}
+          {{ section.settings.hero_image | image_url: width: 900 | image_tag: loading: 'eager', class: 'nc-focal__img', alt: section.settings.hero_image.alt }}
+        {%- else -%}
+          <img
+            src="https://images.pexels.com/photos/9303761/pexels-photo-9303761.jpeg"
+            class="nc-focal__img"
+            loading="eager"
+            alt="NomadCrate Hero Placeholder"
+          >
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="nc-stage__sidebar nc-reveal-right">
+      {%- assign side_prod_1 = section.settings.side_product_1 -%}
+      {%- assign side_prod_2 = section.settings.side_product_2 -%}
+      {%- assign side_prod_3 = section.settings.side_product_3 -%}
+
+      {%- if side_prod_1 != blank or side_prod_2 != blank or side_prod_3 != blank -%}
+        {%- if side_prod_1 != blank -%}
+          <a href="{{ side_prod_1.url }}" class="nc-sidecard nc-sidecard--large">
+            {%- if side_prod_1.featured_image -%}
+              {{ side_prod_1.featured_image | image_url: width: 500 | image_tag: loading: 'lazy', class: 'nc-sidecard__img' }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'nc-sidecard__img placeholder-svg' }}
+            {%- endif -%}
+            <div class="nc-sidecard__hover"><span>{{ side_prod_1.title }}</span></div>
+          </a>
+        {%- endif -%}
+
+        {%- if side_prod_2 != blank or side_prod_3 != blank -%}
+          <div class="nc-sidecard-row">
+            {%- if side_prod_2 != blank -%}
+              <a href="{{ side_prod_2.url }}" class="nc-sidecard nc-sidecard--sm">
+                {%- if side_prod_2.featured_image -%}
+                  {{ side_prod_2.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', class: 'nc-sidecard__img' }}
+                {%- else -%}
+                  {{ 'product-2' | placeholder_svg_tag: 'nc-sidecard__img placeholder-svg' }}
                 {%- endif -%}
-                <div class="nc-card-details">
-                  <span class="nc-card-tag">{{ block.settings.card_tag | escape }}</span>
-                  <h3 class="nc-card-heading">{{ block.settings.card_title | escape }}</h3>
-                  {%- if block.settings.card_link != blank -%}
-                    <a href="{{ block.settings.card_link }}" class="nc-card-action-link">
-                      {{ block.settings.card_link_label | escape }} 
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </a>
-                  {%- endif -%}
-                </div>
-              </div>
-          {%- endcase -%}
-        {%- endfor -%}
-      </div>
+                <div class="nc-sidecard__hover"><span>{{ side_prod_2.title }}</span></div>
+              </a>
+            {%- endif -%}
+            
+            {%- if side_prod_3 != blank -%}
+              <a href="{{ side_prod_3.url }}" class="nc-sidecard nc-sidecard--sm">
+                {%- if side_prod_3.featured_image -%}
+                  {{ side_prod_3.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', class: 'nc-sidecard__img' }}
+                {%- else -%}
+                  {{ 'product-3' | placeholder_svg_tag: 'nc-sidecard__img placeholder-svg' }}
+                {%- endif -%}
+                <div class="nc-sidecard__hover"><span>{{ side_prod_3.title }}</span></div>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
 
+      {%- else -%}
+        <!-- Fallback Static Content -->
+        <div class="nc-sidecard nc-sidecard--large">
+          <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=80" class="nc-sidecard__img" loading="lazy" alt="Tech Pack">
+          <div class="nc-sidecard__hover"><span>Explore Tech Packs</span></div>
+        </div>
+        <div class="nc-sidecard-row">
+          <div class="nc-sidecard nc-sidecard--sm">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=80" class="nc-sidecard__img" loading="lazy" alt="Watch">
+          </div>
+          <div class="nc-sidecard nc-sidecard--sm">
+            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=300&q=80" class="nc-sidecard__img" loading="lazy" alt="Glasses">
+          </div>
+        </div>
+      {%- endif -%}
     </div>
   </div>
+
+  <div class="nc-dock">
+  <h2 class="nc-dock__label">
+    {{ section.settings.dock_title | default: 'Collections' }}
+  </h2>
+
+  <div class="nc-dock__grid">
+
+    {% for collection in collections %}
+
+      {% if collection.products_count > 0 %}
+
+        <a href="{{ collection.url }}"
+           class="nc-chip nc-chip--{% if forloop.first %}orange{% else %}dark{% endif %}">
+
+          <div class="nc-chip__thumb">
+
+            {% if collection.featured_image %}
+              {{
+                collection.featured_image
+                | image_url: width: 150
+                | image_tag: loading: 'lazy', class: 'nc-chip__img'
+              }}
+            {% elsif collection.products.first.featured_image %}
+              {{
+                collection.products.first.featured_image
+                | image_url: width: 150
+                | image_tag: loading: 'lazy', class: 'nc-chip__img'
+              }}
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'nc-chip__placeholder' }}
+            {% endif %}
+
+          </div>
+
+          <div class="nc-chip__info">
+            <span class="nc-chip__name">
+              {{ collection.title }}
+            </span>
+
+            <span style="font-size:12px;color:rgba(255,255,255,.7);">
+              {{ collection.products_count }} Products
+            </span>
+          </div>
+
+        </a>
+
+      {% endif %}
+
+    {% endfor %}
+
+  </div>
+</div>
+
+  <div class="nc-toast" id="ncToast" role="alert" aria-live="polite">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="ncToastMsg">Added to cart!</span>
+  </div>
+
 </section>
 
 {% stylesheet %}
-.nc-hero-section {
+
+
+/* ──────────────────────────────────────────
+   NC HERO — Enhanced UI/UX with Background
+   ────────────────────────────────────────── */
+:root {
+  --nc-ink:    #0b0f19;
+  --nc-orange: #ff6b00;
+  --nc-cream:  #f8f6f0;
+  --nc-muted:  #64748b;
+  --nc-border: rgba(11,15,25,0.06);
+  --nc-white:  #ffffff;
+  --nc-dark-dock: #0a0d14;
+  --nc-easing: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nc-dock .nc-chip {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nc-hero {
   position: relative;
-  height: 100vh;
-  height: 100svh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background-color: #0f1115;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  overflow-x: clip;
 }
 
-.nc-hero-media-vault {
+
+/* ── MOUNTAIN/CAMPSITE BACKGROUND ── */
+.nc-hero::before {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--bg-image, url('https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=2000&q=80'));
+  background-size: cover;
+  background-position: center;
+  opacity: 0.12;
+  mix-blend-mode: multiply; 
+  pointer-events: none;
 }
 
-.nc-hero-img-asset {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  animation: ncScaleKenBurns 28s ease-out forwards;
-}
-
-.nc-hero-cinematic-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(15, 17, 21, 0.9) 0%,
-    rgba(15, 17, 21, 0.7) 45%,
-    rgba(15, 17, 21, 0.3) 100%
-  );
-}
-
-.nc-hero-viewport {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem 3rem;
-  position: relative;
-  z-index: 2;
-  max-height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.nc-hero-master-grid {
+/* ── STAGE GRID ── */
+.nc-stage {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 4rem;
+  grid-template-columns: 1fr 1.15fr 0.65fr;
+  gap: 2rem;
+  padding: 4rem 3rem 3rem;
   align-items: center;
+  max-width: 1600px;
+  margin: 0 auto;
   width: 100%;
+  position: relative;
+  z-index: 2; 
 }
 
-.nc-hero-narrative {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.nc-hero-badge {
+/* ── LEFT COPY ── */
+.nc-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 8px 16px;
-  border-radius: 100px;
-  margin-bottom: 2rem;
-  backdrop-filter: blur(8px);
+  margin-bottom: 1.25rem;
+  animation: ncFadeUp 0.8s var(--nc-easing) 0.1s both;
+}
+.nc-eyebrow__dot { width: 8px; height: 8px; background: var(--nc-orange); border-radius: 50%; }
+.nc-eyebrow span:last-child {
+  font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+  letter-spacing: 0.15em; color: var(--nc-orange);
 }
 
-.nc-badge-dot {
-  width: 6px;
-  height: 6px;
-  background-color: #d97706; /* Sunset Amber */
-  border-radius: 50%;
-  box-shadow: 0 0 12px rgba(217, 119, 6, 0.8);
-  animation: ncPulseBeacon 2.5s infinite;
+.nc-headline { margin: 0 0 1.25rem; line-height: 0.95; display: flex; flex-direction: column; gap: 4px; }
+.nc-headline__hollow {
+  font-size: clamp(2.5rem, 4.5vw, 5.5rem); font-weight: 900; text-transform: uppercase;
+  color: transparent; -webkit-text-stroke: 1.5px var(--nc-ink); letter-spacing: -0.02em;
+  animation: ncRevealUp 0.8s var(--nc-easing) 0.15s both;
+}
+.nc-headline__solid {
+  font-size: clamp(2.5rem, 4.5vw, 5.5rem); font-weight: 900; text-transform: uppercase;
+  color: var(--nc-ink); letter-spacing: -0.02em;
+  animation: ncRevealUp 0.8s var(--nc-easing) 0.25s both;
 }
 
-.nc-badge-text {
-  color: #f8fafc;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+.nc-subheading {
+  font-size: 1rem; line-height: 1.6; color: var(--nc-muted);
+  max-width: 420px; margin: 0 0 2.5rem; animation: ncFadeUp 0.8s var(--nc-easing) 0.35s both;
 }
 
-.nc-hero-editorial-title {
-  color: #ffffff;
-  line-height: 1.1;
-  margin: 0 0 1.5rem 0;
+.nc-cta-row { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; animation: ncFadeUp 0.8s var(--nc-easing) 0.45s both; }
+
+/* Primary Button */
+.nc-btn {
+  display: inline-flex; align-items: center; gap: 12px; text-decoration: none;
+  font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;
+  border-radius: 100px; transition: all 0.3s ease; border: none; cursor: pointer;
+}
+.nc-btn:focus-visible { outline: 2px solid var(--nc-orange); outline-offset: 4px; }
+.nc-btn--primary { background: var(--nc-ink); color: var(--nc-white); padding: 12px 16px 12px 28px; }
+.nc-btn--primary:hover { background: var(--nc-orange); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(255,107,0,0.25); }
+.nc-btn__arrow {
+  width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease;
+}
+.nc-btn--primary:hover .nc-btn__arrow { transform: translateX(4px); }
+
+/* Ghost Button */
+.nc-btn--ghost { background: transparent; color: var(--nc-ink); padding: 8px 16px; text-transform: none; letter-spacing: 0; font-size: 0.9rem; }
+.nc-btn__icon-wrapper { color: var(--nc-muted); transition: color 0.3s ease; display: flex; }
+.nc-btn--ghost:hover { color: var(--nc-orange); }
+.nc-btn--ghost:hover .nc-btn__icon-wrapper { color: var(--nc-orange); }
+
+/* ── CENTER FOCAL ── */
+.nc-stage__focal { position: relative; display: flex; justify-content: center; align-items: center; animation: ncFadeUp 0.8s var(--nc-easing) 0.2s both; width: 100%; }
+.nc-focal__backdrop {
+  position: absolute; top: 4%; right: -2%; width: 75%; height: 96%; background: var(--nc-orange);
+  border-radius: 24px; z-index: 1; transform: rotate(2deg); transition: transform 0.5s var(--nc-easing);
+}
+.nc-stage__focal:hover .nc-focal__backdrop { transform: rotate(4deg) scale(1.02); }
+
+.nc-focal__star {
+  position: absolute; top: 0; right: 5%; width: 60px; height: 60px; z-index: 3;
+  filter: drop-shadow(0 4px 12px rgba(255,107,0,0.3)); transition: transform 0.6s var(--nc-easing);
+}
+.nc-stage__focal:hover .nc-focal__star { transform: rotate(25deg) scale(1.1); }
+
+.nc-focal__frame {
+  position: relative; width: 85%; aspect-ratio: 4/5; border-radius: 20px; overflow: hidden;
+  z-index: 2; box-shadow: 0 24px 48px rgba(11,15,25,0.12);
+}
+.nc-focal__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--nc-easing); }
+.nc-stage__focal:hover .nc-focal__img { transform: scale(1.04); }
+
+/* ── RIGHT SIDEBAR ── */
+.nc-stage__sidebar { display: flex; flex-direction: column; gap: 1.25rem; animation: ncFadeUp 0.8s var(--nc-easing) 0.35s both; }
+.nc-sidecard {
+  display: block; position: relative; border-radius: 16px; overflow: hidden; background: var(--nc-white);
+  border: 1px solid var(--nc-border); transition: transform 0.4s var(--nc-easing), box-shadow 0.4s var(--nc-easing);
+}
+.nc-sidecard--large { aspect-ratio: 16/11; }
+.nc-sidecard--sm { aspect-ratio: 1/1; }
+
+.nc-sidecard:hover { transform: translateY(-6px); box-shadow: 0 16px 32px rgba(11,15,25,0.08); }
+.nc-sidecard:focus-visible { outline: 2px solid var(--nc-orange); outline-offset: 4px; }
+.nc-sidecard__img { width: 100%; height: 100%; object-fit: cover; }
+.nc-sidecard-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+.nc-sidecard__hover {
+  position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,15,25,0.8) 0%, rgba(11,15,25,0.2) 100%);
+  color: var(--nc-white); display: flex; align-items: flex-end; justify-content: center; opacity: 0;
+  transition: opacity 0.3s ease; padding: 1.5rem 1rem;
+}
+.nc-sidecard__hover span { font-weight: 700; font-size: 0.95rem; text-align: center; transform: translateY(10px); transition: transform 0.3s var(--nc-easing); }
+.nc-sidecard:hover .nc-sidecard__hover { opacity: 1; }
+.nc-sidecard:hover .nc-sidecard__hover span { transform: translateY(0); }
+
+/* ── FEATURED DOCK ── */
+.nc-dock { background: var(--nc-dark-dock); padding: 1.5rem 3rem; display: flex; align-items: center; gap: 3rem; position: relative; z-index: 3; }
+.nc-dock__label { font-size: 1rem; font-weight: 800; color: var(--nc-white); white-space: nowrap; margin: 0; letter-spacing: 0.05em; text-transform: uppercase; }
+.nc-dock__grid {
   display: flex;
-  flex-direction: column;
-}
-
-.nc-title-light {
-  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
-  font-weight: 300;
-  color: #e2e8f0;
-  font-family: "Playfair Display", "Didot", "Georgia", serif;
-  font-style: italic;
-  letter-spacing: -0.01em;
-}
-
-.nc-title-bold {
-  font-size: clamp(2.8rem, 5vw, 5.5rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: -0.03em;
-  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.nc-hero-paragraph {
-  color: #cbd5e1;
-  font-size: clamp(1.05rem, 1.5vw, 1.15rem);
-  line-height: 1.6;
-  max-width: 500px;
-  margin: 0 0 2.5rem 0;
-  font-weight: 400;
-}
-
-.nc-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  background-color: #ffffff;
-  color: #0f1115;
-  text-decoration: none;
-  padding: 6px 6px 6px 32px;
-  border-radius: 100px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nc-btn-arrow-wrapper {
-  width: 42px;
-  height: 42px;
-  background-color: #d97706; /* Sunset Amber */
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin-left: 24px;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nc-btn-arrow-wrapper svg {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s ease;
-}
-
-.nc-btn-primary:hover {
-  background-color: #f8fafc;
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-}
-
-.nc-btn-primary:hover .nc-btn-arrow-wrapper {
-  transform: translateX(4px);
-}
-
-.nc-hero-interactive-wing {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.nc-glass-card {
-  background: rgba(20, 20, 25, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 1.5rem;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  max-width: 380px;
+  flex-wrap: wrap;
+  gap: 1rem;
   width: 100%;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  transform: translateY(0);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nc-glass-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(255, 255, 255, 0.25);
-  background: rgba(30, 30, 35, 0.45);
-  box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.6);
+/* ── PRODUCT CHIP ── */
+.nc-chip {
+  display: flex; align-items: center; gap: 1rem; border-radius: 14px; padding: 0.6rem; padding-right: 1.25rem;
+  transition: background-color 0.3s ease, transform 0.3s ease; min-width: 200px; flex: 1; border: 1px solid transparent;
+  flex: 1 1 220px;
+  min-width: 0;
 }
+.nc-chip--orange { background: var(--nc-orange); border-color: rgba(255,255,255,0.2); }
+.nc-chip--dark { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.06); }
 
-.nc-card-thumb {
-  width: 85px;
-  height: 85px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  overflow: hidden;
-  flex-shrink: 0;
+.nc-chip:hover { transform: translateY(-2px); }
+.nc-chip--dark:hover { background: rgba(255,255,255,0.08); }
+
+.nc-chip__thumb { width: 60px; height: 60px; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.1); flex-shrink: 0; display: block; }
+.nc-chip__placeholder { width: 100%; height: 100%; background: #1f2937; fill: #64748b; }
+.nc-chip__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.nc-chip__thumb:hover .nc-chip__img { transform: scale(1.1); }
+
+.nc-chip__info { display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+.nc-chip__name { font-size: 0.85rem; font-weight: 700; color: var(--nc-white); text-decoration: none; line-height: 1.2; }
+.nc-chip__name:hover { text-decoration: underline; }
+
+.nc-chip__cta {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700;
+  color: rgba(255,255,255,0.6); text-transform: uppercase; background: none; border: none; padding: 0; cursor: pointer; transition: color 0.2s; position: relative;
 }
+.nc-chip__cta:hover:not(:disabled) { color: var(--nc-white); }
+.nc-chip__cta:disabled { opacity: 0.5; cursor: not-allowed; }
+.nc-chip__cta:focus-visible { outline: 2px solid var(--nc-white); outline-offset: 4px; border-radius: 2px; }
 
-.nc-thumb-asset {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+/* Loading State for Button */
+.nc-chip__loader {
+  display: none; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: var(--nc-white); border-radius: 50%; animation: ncSpin 0.8s linear infinite;
 }
+.nc-chip__cta.is-loading .nc-chip__cta-text { opacity: 0.7; }
+.nc-chip__cta.is-loading .nc-chip__cta-icon { display: none; }
+.nc-chip__cta.is-loading .nc-chip__loader { display: block; }
 
-.nc-glass-card:hover .nc-thumb-asset {
-  transform: scale(1.05);
+/* ── TOAST ── */
+.nc-toast {
+  position: fixed; bottom: 2rem; right: 2rem; background: var(--nc-white); color: var(--nc-ink); padding: 16px 24px;
+  border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.15); font-size: 0.9rem; font-weight: 700; display: flex;
+  align-items: center; gap: 12px; z-index: 999; transform: translateY(120%) scale(0.95); opacity: 0; transition: all 0.4s var(--nc-easing); pointer-events: none;
 }
+.nc-toast--visible { transform: translateY(0) scale(1); opacity: 1; }
 
-.nc-card-details {
-  display: flex;
-  flex-direction: column;
+/* ── ANIMATIONS ── */
+@keyframes ncRevealUp { from { opacity:0; transform: translateY(40px); } to { opacity:1; transform: none; } }
+@keyframes ncFadeUp   { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: none; } }
+@keyframes ncSpin     { to { transform: rotate(360deg); } }
+.nc-reveal-left  { animation: ncRevealLeft  0.8s var(--nc-easing) 0.1s both; }
+.nc-reveal-right { animation: ncRevealRight 0.8s var(--nc-easing) 0.25s both; }
+@keyframes ncRevealLeft  { from { opacity:0; transform: translateX(-30px); } to { opacity:1; transform: none; } }
+@keyframes ncRevealRight { from { opacity:0; transform: translateX(30px);  } to { opacity:1; transform: none; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+  .nc-stage { grid-template-columns: 1fr 1fr; padding-inline: 2rem; }
+  .nc-stage__sidebar { display: none; }
+  .nc-dock { padding-inline: 2rem; }
 }
+@media (max-width: 840px) {
 
-.nc-card-tag {
-  color: #d97706; /* Sunset Amber */
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 6px;
-}
-
-.nc-card-heading {
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 10px 0;
-  line-height: 1.3;
-}
-
-.nc-card-action-link {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: color 0.2s ease;
-}
-
-.nc-card-action-link svg {
-  transition: transform 0.2s ease;
-}
-
-.nc-glass-card:hover .nc-card-action-link {
-  color: #ffffff;
-}
-
-.nc-glass-card:hover .nc-card-action-link svg {
-  transform: translateX(4px);
-}
-
-/* Animations */
-@keyframes ncScaleKenBurns {
-  from { transform: scale(1.08); }
-  to { transform: scale(1.0); }
-}
-
-@keyframes ncPulseBeacon {
-  0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); }
-  70% { box-shadow: 0 0 0 6px rgba(217, 119, 6, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
-}
-
-.animate-item {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: ncSlideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.nc-hero-narrative .animate-item:nth-child(1) { animation-delay: 0.1s; }
-.nc-hero-narrative .animate-item:nth-child(2) { animation-delay: 0.25s; }
-.nc-hero-narrative .animate-item:nth-child(3) { animation-delay: 0.4s; }
-.nc-hero-narrative .animate-item:nth-child(4) { animation-delay: 0.55s; }
-
-.animate-card {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: ncCardSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
-}
-
-@keyframes ncSlideUpFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes ncCardSlideIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive Overrides */
-@media screen and (max-width: 1100px) {
-  .nc-hero-master-grid {
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 3rem;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .nc-hero-section {
-    height: 100vh;
-    height: 100svh;
-    padding-top: 0;
-  }
-  
-  .nc-hero-cinematic-overlay {
-    background: linear-gradient(
-      180deg,
-      rgba(15, 17, 21, 0.8) 0%,
-      rgba(15, 17, 21, 0.6) 50%,
-      rgba(15, 17, 21, 0.9) 100%
-    );
-  }
-
-  .nc-hero-viewport {
-    padding: 2rem;
-  }
-
-  .nc-hero-master-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    text-align: center;
-  }
-
-  .nc-hero-narrative {
-    align-items: center;
-  }
-
-  .nc-hero-editorial-title {
-    align-items: center;
-    margin-bottom: 1.2rem;
-  }
-  
-  .nc-hero-paragraph {
-    margin-bottom: 2rem;
-  }
-
-  .nc-hero-interactive-wing {
-    justify-content: center;
-  }
-  
-  .nc-glass-card {
-    max-width: 420px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .nc-hero-viewport {
-    padding: 1.5rem;
-  }
-  
-  .nc-btn-primary {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .nc-glass-card {
-    padding: 1.25rem;
+  .nc-dock {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
     gap: 1rem;
   }
 
-  .nc-card-thumb {
-    width: 75px;
-    height: 75px;
+  .nc-dock__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    overflow: hidden;
   }
+
+  .nc-chip {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+  }
+}
+@media (max-width: 480px) {
+  .nc-btn--primary { width: 100%; justify-content: space-between; }
+  .nc-chip { flex: 0 0 90%; }
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 {% endstylesheet %}
 
+{% javascript %}
+(function () {
+  'use strict';
+
+  const heroes = document.querySelectorAll('.nc-hero');
+  
+  heroes.forEach(function(hero) {
+    const toast      = hero.querySelector('.nc-toast');
+    const toastMsg   = hero.querySelector('#ncToastMsg');
+    let   toastTimer;
+
+    function showToast(message) {
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = message;
+      toast.classList.add('nc-toast--visible');
+      
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('nc-toast--visible');
+      }, 3500);
+    }
+
+    function addToCart(variantId, productTitle, btn) {
+      if (!variantId) return;
+
+      const btnText = btn.querySelector('.nc-chip__cta-text');
+      
+      btn.classList.add('is-loading');
+      btn.disabled = true;
+      if(btnText) btnText.textContent = 'Adding...';
+
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Cart error');
+        return res.json();
+      })
+      .then(item => {
+        showToast((productTitle || item.title) + ' added to your crate!');
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+        document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: { product: item } }));
+      })
+      .catch(err => {
+        console.error('Add to cart failed:', err);
+        showToast('Error adding item. Try again.');
+      })
+      .finally(() => {
+        btn.classList.remove('is-loading');
+        btn.disabled = false;
+        if(btnText) btnText.textContent = 'Add to Cart';
+      });
+    }
+
+    hero.querySelectorAll('.nc-chip__cta[data-variant-id]').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const variantId    = btn.getAttribute('data-variant-id');
+        const productTitle = btn.getAttribute('data-product-title');
+        addToCart(variantId, productTitle, btn);
+      });
+    });
+  });
+
+})();
+{% endjavascript %}
+
 {% schema %}
 {
-  "name": "NomadCrate Advanced Hero",
+  "name": "NomadCrate Hero",
   "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
     {
       "type": "image_picker",
       "id": "bg_image",
-      "label": "Hero Background Image Layout"
+      "label": "Background Image",
+      "info": "Adds a faded background image behind the section. If empty, a default background is used."
+    },
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Center Showcase Image"
+    },
+    {
+      "type": "header",
+      "content": "Right Side Products"
+    },
+    {
+      "type": "product",
+      "id": "side_product_1",
+      "label": "Side Product 1 (tall)",
+      "info": "Replaces the placeholder image and links directly to the product."
+    },
+    {
+      "type": "product",
+      "id": "side_product_2",
+      "label": "Side Product 2 (small)"
+    },
+    {
+      "type": "product",
+      "id": "side_product_3",
+      "label": "Side Product 3 (small)"
+    },
+    {
+      "type": "header",
+      "content": "Featured Items Dock"
+    },
+    {
+      "type": "text",
+      "id": "dock_title",
+      "label": "Dock Title",
+      "default": "Featured Items"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Select Collection to Display"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Number of products to show"
+    },
+    {
+      "type": "header",
+      "content": "Copy"
     },
     {
       "type": "text",
       "id": "tagline",
-      "label": "Small Tagline Label",
-      "default": "Premium Travel Equipment"
+      "label": "Eyebrow Tagline",
+      "default": "Trendy Collections 🔥"
     },
     {
       "type": "text",
       "id": "title_part_1",
-      "label": "Editorial Font Line (Italic)",
-      "default": "Travel Smarter."
+      "label": "Headline — Outline Line",
+      "default": "Gear Curated"
     },
     {
       "type": "text",
       "id": "title_part_2",
-      "label": "Impact Bold Line",
-      "default": "Pack Better."
+      "label": "Headline — Solid Line",
+      "default": "For The Road"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "subheading",
-      "label": "Context Subheading Description",
-      "default": "Highly optimized dynamic luggage and storage configurations engineered for the modern technical explorer."
+      "label": "Subheading Description",
+      "default": "Stop buying isolated products. Engineer cohesive travel combinations designed precisely for your next objective."
     },
     {
       "type": "text",
       "id": "btn_label",
-      "label": "Call To Action Text",
-      "default": "Explore Essentials"
+      "label": "Primary Button Text",
+      "default": "Shop Now"
     },
     {
       "type": "url",
       "id": "btn_link",
-      "label": "Call To Action Target Destination",
-      "default": "/collections/all"
-    }
-  ],
-  "blocks": [
+      "label": "Primary Button Link"
+    },
     {
-      "type": "spotlight_card",
-      "name": "Floating Feature Card",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "card_image",
-          "label": "Featured Item Miniature Image"
-        },
-        {
-          "type": "text",
-          "id": "card_tag",
-          "label": "Small Highlight Tag",
-          "default": "Trending Highlight"
-        },
-        {
-          "type": "text",
-          "id": "card_title",
-          "label": "Product System Title",
-          "default": "Modular Tech Crate v2"
-        },
-        {
-          "type": "text",
-          "id": "card_link_label",
-          "label": "Action Text Link",
-          "default": "Configure Bundle"
-        },
-        {
-          "type": "url",
-          "id": "card_link",
-          "label": "Product Core Destination URL"
-        }
-      ]
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary Link Text",
+      "default": "What's Trending?"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary Link URL"
     }
   ],
   "presets": [
     {
-      "name": "NomadCrate Advanced Hero",
-      "blocks": [
-        {
-          "type": "spotlight_card"
-        }
-      ]
+      "name": "NomadCrate Hero"
     }
   ]
 }

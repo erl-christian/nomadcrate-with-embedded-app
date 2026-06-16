@@ -80,3 +80,59 @@ export const activityLogs = mysqlTable(
       .defaultNow(),
   }
 );
+
+export const packBuilderRequests =
+mysqlTable(
+  "pack_builder_requests",
+  {
+    id: int("id")
+      .autoincrement()
+      .primaryKey(),
+
+    customerName: varchar(
+      "customer_name",
+      { length: 255 }
+    ),
+
+    customerType: varchar(
+      "customer_type",
+      { length: 50 }
+    ).default("guest"),
+
+    destination: varchar(
+      "destination",
+      { length: 100 }
+    ),
+
+    travelStyle: varchar(
+      "travel_style",
+      { length: 100 }
+    ),
+
+    tripLength: varchar(
+      "trip_length",
+      { length: 50 }
+    ),
+
+    recommendedPack: varchar(
+      "recommended_pack",
+      { length: 255 }
+    ),
+
+    productCount: int(
+      "product_count"
+    ),
+
+    bundleValue: decimal(
+      "bundle_value",
+      {
+        precision: 10,
+        scale: 2,
+      }
+    ),
+
+    createdAt: timestamp(
+      "created_at"
+    ).defaultNow(),
+  }
+);

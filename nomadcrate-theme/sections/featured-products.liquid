@@ -1,275 +1,431 @@
-<section class="featured-products">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-subtitle">Gear Spotlights</span>
-      <h2>{{ section.settings.heading }}</h2>
-      <p>{{ section.settings.subheading }}</p>
+<section class="nc-featured-products section-{{ section.id }}">
+  <div class="nc-container">
+    
+    <div class="nc-section-header animate-fade-in">
+      <span class="nc-section-subtitle">Gear Spotlights</span>
+      <h2 class="nc-section-title">{{ section.settings.heading }}</h2>
+      <p class="nc-section-desc">{{ section.settings.subheading }}</p>
     </div>
 
     {% assign featured_collection = section.settings.featured_collection %}
 
     {% if featured_collection != blank and featured_collection.all_products_count > 0 %}
-      <div class="products-grid">
+      <!-- Drag-to-Scroll Track -->
+      <div class="nc-products-slider-track" id="productSlider-{{ section.id }}">
+        
         {% for product in featured_collection.products limit: section.settings.products_to_show %}
-          <div class="product-card">
-            <a href="{{ product.url }}" class="product-image-link">
-              <div class="product-image-container">
-                {% if product.featured_image %}
-                  {{
-                    product.featured_image
-                    | image_url: width: 800
-                    | image_tag: class: 'product-image', loading: 'lazy'
-                  }}
+          <div class="nc-product-card">
+            <a href="{{ product.url }}" class="nc-product-link-wrapper">
+              
+              <div class="nc-product-image-vault">
+                <div class="nc-img-scale-wrapper">
+                  {% if product.featured_image %}
+                    {{
+                      product.featured_image
+                      | image_url: width: 800
+                      | image_tag: class: 'nc-product-img', loading: 'lazy'
+                    }}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'nc-product-img placeholder-svg' }}
+                  {% endif %}
+                </div>
+
+                <!-- Premium Status Badges -->
+                {% if product.available %}
+                  <span class="nc-stock-badge">In Stock</span>
                 {% else %}
-                  {{ 'product-1' | placeholder_svg_tag: 'product-image placeholder-svg' }}
+                  <span class="nc-stock-badge sold-out">Sold Out</span>
                 {% endif %}
               </div>
 
-              {% if product.available %}
-                <span class="stock-badge">In Stock</span>
-              {% else %}
-                <span class="stock-badge sold-out">Sold Out</span>
-              {% endif %}
-            </a>
+              <div class="nc-product-content">
+                <span class="nc-product-vendor">{{ product.vendor }}</span>
+                <h3 class="nc-product-title">{{ product.title }}</h3>
 
-            <div class="product-content">
-              <span class="product-vendor">{{ product.vendor }}</span>
-              <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
-
-              <div class="product-footer-row">
-                {% if product.compare_at_price > product.price %}
-                  <div class="product-pricing">
-                    <span class="sale-price">{{ product.price | money }}</span>
-                    <span class="compare-price">{{ product.compare_at_price | money }}</span>
+                <div class="nc-product-footer-row">
+                  <div class="nc-product-pricing">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="nc-sale-price">{{ product.price | money }}</span>
+                      <span class="nc-compare-price">{{ product.compare_at_price | money }}</span>
+                    {% else %}
+                      <span class="nc-regular-price">{{ product.price | money }}</span>
+                    {% endif %}
                   </div>
-                {% else %}
-                  <p class="product-price">{{ product.price | money }}</p>
-                {% endif %}
 
-                <a href="{{ product.url }}" class="product-btn" aria-label="View {{ product.title }}">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </a>
+                  <!-- Magnetic Action Button -->
+                  <div class="nc-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  </div>
+                </div>
               </div>
-            </div>
+              
+            </a>
           </div>
         {% endfor %}
+        
       </div>
     {% else %}
-      <div class="empty-state">
-        <div class="empty-state-icon">📦</div>
+      <!-- Premium Empty State -->
+      <div class="nc-empty-state">
+        <div class="nc-empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
         <h3>No Collection Selected</h3>
         <p>Assign a collection inside the Theme Editor settings panel to map out items.</p>
       </div>
     {% endif %}
+
   </div>
 </section>
 
 {% stylesheet %}
-.featured-products {
-  padding: 7rem 2rem;
-  background: #f8fafc;
-  border-top: 1px solid #f1f5f9;
-}
-
-.featured-products .container {
-  max-width: 1300px;
-  margin: 0 auto;
-}
-
-.featured-products .section-header {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.featured-products .section-subtitle {
-  color: #ff6b00;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.featured-products .section-header h2 {
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-}
-
-.featured-products .section-header p {
-  color: #64748b;
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.featured-products .products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-}
-
-.featured-products .product-card {
+.nc-featured-products {
+  padding: 8rem 0;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 24px;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden; /* Contains the bleeding slider */
+}
+
+.nc-featured-products .nc-container {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+.nc-section-header {
+  margin-bottom: 4rem;
+  max-width: 600px;
+}
+
+.nc-section-subtitle {
+  color: #ff6b00;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.nc-section-title {
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 900;
+  color: #0b0f19;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.nc-section-desc {
+  color: #64748b;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Draggable Slider Engine */
+.nc-products-slider-track {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 2rem;
+  padding: 1rem 3rem 4rem 3rem; /* Accounts for hover drop shadows */
+  margin: 0 -3rem; /* Pulls track to container edge */
+  
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  scrollbar-width: none; /* Hide standard scrollbar */
+  cursor: grab;
+}
+
+.nc-products-slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+.nc-products-slider-track:active {
+  cursor: grabbing;
+}
+
+/* Premium Product Card */
+.nc-product-card {
+  flex: 0 0 calc(25% - 1.5rem); /* 4 cards perfectly visible */
+  scroll-snap-align: start;
+  min-width: 300px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(11, 15, 25, 0.03);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateZ(0); /* Hardware accel for smooth animation */
+}
+
+.nc-product-link-wrapper {
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  height: 100%;
 }
 
-.featured-products .product-card:hover {
-  transform: translateY(-6px);
-  border-color: #cbd5e1;
-  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.03);
+.nc-product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(11, 15, 25, 0.08);
+  border-color: rgba(255, 107, 0, 0.3);
 }
 
-.featured-products .product-image-link {
+.nc-product-image-vault {
+  width: 100%;
+  height: 320px;
   position: relative;
-  display: block;
-  background: #f8fafc;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  background: #f1f5f9;
+}
+
+.nc-img-scale-wrapper {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-.featured-products .product-image-container {
-  width: 100%;
-  height: 280px;
-}
-
-.featured-products .product-image {
+.nc-product-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.featured-products .product-card:hover .product-image {
-  transform: scale(1.03);
+.nc-product-card:hover .nc-product-img {
+  transform: scale(1.08); /* The Ken Burns Effect */
 }
 
-.featured-products .stock-badge {
+/* Premium Frost Badge */
+.nc-stock-badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #1e293b;
-  border: 1px solid rgba(226, 232, 240, 0.5);
-  padding: 0.4rem 0.8rem;
+  top: 1.25rem;
+  left: 1.25rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #0b0f19;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0.4rem 1rem;
   border-radius: 100px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.featured-products .stock-badge.sold-out {
+.nc-stock-badge.sold-out {
   color: #94a3b8;
   background: rgba(241, 245, 249, 0.9);
 }
 
-.featured-products .product-content {
-  padding: 1.5rem;
+.nc-product-content {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.featured-products .product-vendor {
+.nc-product-vendor {
   display: block;
   color: #94a3b8;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
 }
 
-.featured-products .product-content h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
+.nc-product-title {
+  color: #0b0f19;
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 1.5rem 0;
   line-height: 1.4;
-  flex-grow: 1;
+  transition: color 0.3s ease;
 }
 
-.featured-products .product-content h3 a {
-  color: #1e293b;
-  text-decoration: none;
+.nc-product-card:hover .nc-product-title {
+  color: #ff6b00;
 }
 
-.featured-products .product-footer-row {
+.nc-product-footer-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
 }
 
-.featured-products .product-pricing {
+.nc-product-pricing {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   align-items: baseline;
 }
 
-.featured-products .sale-price {
-  color: #ff6b00;
-  font-weight: 700;
-  font-size: 1.15rem;
-}
-
-.featured-products .compare-price {
-  color: #94a3b8;
-  text-decoration: line-through;
-  font-size: 0.9rem;
-}
-
-.featured-products .product-price {
-  color: #1e293b;
-  font-weight: 700;
-  font-size: 1.15rem;
+.nc-regular-price,
+.nc-sale-price {
+  color: #0b0f19;
+  font-weight: 800;
+  font-size: 1.25rem;
   margin: 0;
 }
 
-.featured-products .product-btn {
+.nc-sale-price {
+  color: #ff6b00;
+}
+
+.nc-compare-price {
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Magnetic Action Icon */
+.nc-action-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0f172a;
+  color: #0b0f19;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #e2e8f0;
+}
+
+.nc-product-card:hover .nc-action-icon {
+  background: #0b0f19;
   color: #ffffff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  text-decoration: none;
+  transform: scale(1.1) rotate(-45deg); /* Distinctive interaction cue */
+  border-color: #0b0f19;
+  box-shadow: 0 10px 20px rgba(11, 15, 25, 0.15);
 }
 
-.featured-products .product-card:hover .product-btn {
-  background: #ff6b00;
-  transform: scale(1.05);
-}
-
-.featured-products .empty-state {
+/* Empty State Styling */
+.nc-empty-state {
   text-align: center;
-  padding: 4rem 2rem;
-  background: #ffffff;
-  border: 1px dashed #e2e8f0;
-  border-radius: 16px;
+  padding: 6rem 2rem;
+  background: rgba(248, 250, 252, 0.5);
+  border: 1px dashed #cbd5e1;
+  border-radius: 24px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-@media (max-width: 1100px) {
-  .featured-products .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.nc-empty-icon {
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+.nc-empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0b0f19;
+  margin-bottom: 0.5rem;
+}
+
+.nc-empty-state p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* Responsive Rules */
+@media (max-width: 1300px) {
+  .nc-product-card { flex: 0 0 calc(33.333% - 1.33rem); }
+}
+
+@media (max-width: 900px) {
+  .nc-product-card { flex: 0 0 calc(50% - 1rem); }
 }
 
 @media (max-width: 600px) {
-  .featured-products .products-grid {
-    grid-template-columns: 1fr;
+  .nc-featured-products { padding: 5rem 0; }
+  .nc-featured-products .nc-container { padding: 0 1.5rem; }
+  .nc-section-header { text-align: center; margin: 0 auto 3rem auto; }
+  
+  .nc-products-slider-track {
+    padding: 1rem 1.5rem 3rem 1.5rem;
+    margin: 0 -1.5rem;
+    gap: 1.25rem;
   }
+  
+  .nc-product-card { 
+    flex: 0 0 82%; /* Allows the next card to peek onto the screen */
+    scroll-snap-align: center; 
+    min-width: 260px;
+  }
+  
+  .nc-product-image-vault { height: 280px; }
+  .nc-product-content { padding: 1.5rem; }
 }
+
+/* Base Utility */
+.animate-fade-in { opacity: 0; transform: translateY(20px); animation: ncFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes ncFadeUp { to { opacity: 1; transform: translateY(0); } }
 {% endstylesheet %}
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', () => {
+  const sliders = document.querySelectorAll('.nc-products-slider-track');
+
+  sliders.forEach(slider => {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isDragging = false;
+
+    // Prevent clicking a product link if the user's intent was to drag/swipe
+    slider.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (isDragging) {
+          e.preventDefault();
+        }
+      });
+    });
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      isDragging = false;
+      slider.style.cursor = 'grabbing';
+      slider.style.scrollSnapType = 'none'; // Temporarily disable snapping for fluid drag
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+      slider.style.scrollSnapType = 'x mandatory'; // Restore snapping
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+      slider.style.scrollSnapType = 'x mandatory';
+      
+      // Delay resetting the dragging state so the click event captures it correctly
+      setTimeout(() => {
+        isDragging = false;
+      }, 50);
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      isDragging = true;
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 2.2; // Drag multiplier (speed)
+      slider.scrollLeft = scrollLeft - walk;
+    });
+  });
+});
+{% endjavascript %}
 
 {% schema %}
 {
@@ -296,10 +452,10 @@
       "type": "range",
       "id": "products_to_show",
       "label": "Products To Show",
-      "min": 2,
-      "max": 8,
+      "min": 4,
+      "max": 12,
       "step": 1,
-      "default": 4
+      "default": 8
     }
   ],
   "presets": [

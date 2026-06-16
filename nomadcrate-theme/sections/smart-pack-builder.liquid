@@ -82,6 +82,10 @@
 </section>
 
 <script>
+  window.customerData = {
+    name: "{% if customer %}{{ customer.first_name }} {{ customer.last_name }}{% else %}Guest{% endif %}",
+    type: "{% if customer %}customer{% else %}guest{% endif %}"
+  };
 const PRODUCTS = {
   "quick-dry-travel-towel": {
     title: "{{ all_products['quick-dry-travel-towel'].title | default: 'Quick Dry Travel Towel' }}",
@@ -244,6 +248,39 @@ document.getElementById("build-pack-btn").addEventListener("click", () => {
     week: "1 Week Journey",
     long: "Extended 2+ Week Expedition"
   };
+
+  const packName =
+    `${destinationLabel[destination]} Pack`;
+
+  fetch(
+    "https://champion-numbers-finder-likewise.trycloudflare.com/api/pack-builder",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customerName: window.customerData.name,
+        customerType: window.customerData.type,
+        destination,
+        travelStyle: style,
+        tripLength: duration,
+        recommendedPack: packName,
+        productCount: products.length,
+        bundleValue: totalValue / 100,
+      })
+    }
+  )
+  .then((r) => {
+    console.log("STATUS:", r.status);
+    return r.text();
+  })
+  .then((data) => {
+    console.log("RESPONSE:", data);
+  })
+  .catch((e) => {
+    console.error("FETCH ERROR:", e);
+  });
 
   resultsWrapper.innerHTML = `
     <div class="results-container">

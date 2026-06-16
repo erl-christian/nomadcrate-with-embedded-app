@@ -57,10 +57,6 @@ export async function loader({ request }) {
 /* ==================================================
    ACTION
 ================================================== */
-
-/* ==================================================
-   ACTION
-================================================== */
 export async function action({ request }) {
   const formData = await request.formData();
   const intent = formData.get("intent"); // We'll use this to catch the delete action
@@ -141,18 +137,6 @@ export async function action({ request }) {
     return { success: true, actionType: "create" };
   }
 }
-
-/* ==================================================
-   COMPONENT
-================================================== */
-
-/* ==================================================
-   COMPONENT
-================================================== */
-
-/* ==================================================
-   COMPONENT
-================================================== */
 
 export default function Bundles() {
   const { products, existingBundles } = useLoaderData();
